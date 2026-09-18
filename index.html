@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Mahdi Notes Editor v8 Static</title>
+  <link rel="stylesheet" href="css/core.css">
+  <link rel="stylesheet" href="css/editor.css">
+  <link rel="stylesheet" href="css/preview.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-row">
+      <div><strong>Mahdi Notes</strong><small>Static v8</small></div>
+      <button class="icon-btn" id="new-note" title="Ctrl+N">+</button>
+    </div>
+    <input id="note-search" class="input" placeholder="جستجوی یادداشت..." autocomplete="off">
+    <div class="notes-header"><span>یادداشت‌ها</span><span id="note-count">0</span></div>
+    <div class="bulk-actions">
+      <button class="tool-btn small-btn" id="select-all-notes">انتخاب همه</button>
+      <button class="tool-btn small-btn danger" id="delete-selected-notes" disabled>حذف انتخاب‌شده‌ها</button>
+    </div>
+    <div id="note-list" class="note-list"></div>
+  </aside>
+
+  <main class="main">
+    <header class="toolbar">
+      <div class="title-area">
+        <input id="title" class="title-input" placeholder="عنوان یادداشت" autocomplete="off">
+        <div class="toolbar-meta"><span id="current-id"></span></div>
+      </div>
+      <div class="toolbar-actions">
+        <button class="tool-btn" data-command="bold" title="Ctrl+B">B</button>
+        <button class="tool-btn" data-command="italic" title="Ctrl+I"><i>I</i></button>
+        <button class="tool-btn" data-command="inlineCode">`</button>
+        <button class="tool-btn icon-only" data-command="codeBlock" title="بلوک کد">&lt;/&gt;</button>
+        <button class="tool-btn icon-only" id="save" title="Ctrl+S">ذخیره</button>
+        <button class="tool-btn icon-only" id="preview-toggle" title="Ctrl+Shift+P">پیش‌نمایش</button>
+        <button class="tool-btn icon-only" id="focus-toggle" title="Ctrl+Shift+F">تمرکز</button><button class="tool-btn icon-only" id="command-palette-toggle" title="Ctrl+K">دستورها</button>
+        <button class="tool-btn icon-only" id="readOnlyBtn" title="فقط مطالعه">مطالعه</button>
+        <button class="tool-btn danger" id="delete-note">حذف</button>
+        <button class="tool-btn icon-only" id="settings-toggle">تنظیمات</button>
+        <button class="tool-btn icon-only" id="refresh-storage">بازخوانی</button>
+        <button class="tool-btn icon-only" id="help-toggle">?</button>
+      </div>
+    </header>
+
+    <section class="workspace" id="workspace">
+      <section class="editor-pane">
+        <textarea id="editor" spellcheck="false" dir="auto" placeholder="یادداشت خود را اینجا بنویسید..."></textarea>
+        <footer class="statusbar">
+          <span id="word-count">0 کلمه</span>
+          <span id="char-count">0 کاراکتر</span>
+          <span id="save-state">جدید</span>
+          <span id="mode">NORMAL</span>
+          <span id="parse-state"></span>
+        </footer>
+      </section>
+      <div class="pane-resizer" id="pane-resizer" role="separator" aria-label="تغییر اندازه ویرایشگر و نتیجه" tabindex="0"></div>
+      <section class="preview-pane" id="preview-pane"><article id="preview"></article></section>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop hidden" id="modal-backdrop">
+  <section class="modal" id="help-modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><strong>راهنمای سریع</strong><button class="icon-btn small" data-close-modal>×</button></div>
+    <div class="modal-body">
+      <h3>نشانه‌گذاری</h3>
+      <pre><code>h1 => عنوان
+h1E
+
+**بولد**  *ایتالیک*  `کد`
+[متن](https://example.com)
+
+&gt; نقل‌قول
+
+code:javascript
+console.log("hello")
+codeE
+
+link => https://example.com => عنوان لینک
+linkE</code></pre>
+      <h3>میانبرهای اصلی</h3>
+      <ul>
+        <li><kbd>Ctrl+B</kbd> بولد</li><li><kbd>Ctrl+I</kbd> ایتالیک</li>
+        <li><kbd>Ctrl+S</kbd> ذخیره</li><li><kbd>Ctrl+N</kbd> یادداشت جدید</li>
+        <li><kbd>Ctrl+Alt+C</kbd> بلوک کد</li><li><kbd>Ctrl+Shift+P</kbd> پیش‌نمایش</li>
+        <li><kbd>Ctrl+Shift+F</kbd> تمرکز</li><li><kbd>Ctrl+K</kbd> دستورها</li>
+      </ul>
+      <h3>نکته</h3>
+      <p>تنظیمات ظاهر، فونت، اندازه متن، نسبت دو پنل، ذخیره خودکار و بازیابی نشست را یک‌جا کنترل می‌کند.</p>
+    </div>
+  </section>
+
+  <section class="modal hidden" id="settings-modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><strong>تنظیمات</strong><button class="icon-btn small" data-close-modal>×</button></div>
+    <div class="modal-body settings-body">
+      <div class="settings-section">ظاهر و تجربه</div>
+      <label class="setting-row"><span>تم</span><select id="opt-theme">
+        <option value="default">آبی شبانه</option><option value="midnight">نیمه‌شب</option><option value="forest">جنگل</option><option value="violet">بنفش</option><option value="light">روشن</option>
+      </select><small>۴ تم دارک + ۱ تم لایت</small></label>
+      <label class="setting-row"><span>فونت ویرایشگر</span><select id="opt-font">
+        <option value="Tahoma">Tahoma</option><option value="B Nazanin">B Nazanin</option><option value="B Mitra">B Mitra</option><option value="B Yekan">B Yekan</option><option value="B Koodak">B Koodak</option><option value="Vazirmatn">Vazirmatn</option><option value="IRANSans">IRANSans</option><option value="Shabnam">Shabnam</option><option value="Sahel">Sahel</option><option value="Samim">Samim</option>
+      </select><small>اگر فونت روی سیستم نصب نباشد، جایگزین می‌شود</small></label>
+      <label class="setting-row"><span>اندازه متن</span><select id="opt-font-size">
+        <option value="14">۱۴px</option><option value="15">۱۵px</option><option value="16">۱۶px</option><option value="17">۱۷px</option><option value="18">۱۸px</option><option value="20">۲۰px</option><option value="22">۲۲px</option>
+      </select><small>اندازه متن ویرایشگر</small></label>
+      <label class="setting-row"><span>ویرایشگر / نتیجه</span><input id="opt-split" type="range" min="25" max="75" step="1" value="50"><small id="split-label">۵۰٪ / ۵۰٪</small></label>
+
+      <div class="settings-section">ذخیره و نشست</div>
+      <label class="setting-row"><span>ذخیره خودکار</span><input type="checkbox" id="opt-autosave"><small>ذخیره بعد از توقف تایپ</small></label>
+      <label class="setting-row"><span>زمان ذخیره</span><select id="opt-autosave-ms">
+        <option value="100">۱۰۰ms</option><option value="250">۲۵۰ms</option><option value="500">۵۰۰ms</option><option value="750">۷۵۰ms</option><option value="1000">۱ ثانیه</option><option value="2000">۲ ثانیه</option><option value="5000">۵ ثانیه</option>
+      </select><small>هرچه کمتر، ذخیره سریع‌تر</small></label>
+      <label class="setting-row"><span>عمر بازیابی نشست</span><select id="opt-session-days">
+        <option value="7">۷ روز</option><option value="30">۳۰ روز</option><option value="90">۹۰ روز</option><option value="180">۱۸۰ روز</option><option value="365">۱ سال</option>
+      </select><small>نسخه بازیابی آخرین وضعیت</small></label>
+      <label class="setting-row"><span>شوخی شبکه‌کار</span><select id="opt-joke-minutes"><option value="5">۵ دقیقه</option><option value="10">۱۰ دقیقه</option><option value="15">۱۵ دقیقه</option><option value="30">۳۰ دقیقه</option></select><small>تنها شوخی فعال برنامه</small></label>
+
+      <div class="settings-section">ابزارهای کم‌استفاده</div>
+      <div class="settings-buttons">
+        <button class="tool-btn" id="export-all-json">خروجی همه</button>
+        <button class="tool-btn" id="import-json">ورود فایل</button>
+        <button class="tool-btn danger" id="clear-storage">پاک‌سازی همه</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal command-modal hidden" id="command-modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><strong>Command Palette</strong><button class="icon-btn small" data-close-modal>×</button></div>
+    <input id="command-search" class="input command-search" placeholder="جستجوی دستور...">
+    <div id="command-list" class="command-list"></div>
+  </section>
+
+  <section class="modal confirm-modal hidden" id="confirm-modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><strong>تأیید عملیات</strong></div>
+    <div class="modal-body"><p class="confirm-message"></p><div class="modal-actions"><button class="tool-btn" data-close-modal>انصراف</button><button class="tool-btn danger" id="confirm-yes">تأیید</button></div></div>
+  </section>
+</div>
+
+<div id="app-alert" class="app-alert hidden" role="status" aria-live="polite">
+  <span class="alert-mark">!</span><div class="alert-copy"><strong class="alert-title">پیام</strong><span class="alert-message"></span></div><button class="alert-close" aria-label="بستن">×</button>
+</div>
+<input id="file-import" type="file" accept=".json,.txt,.md" hidden>
+
+<script src="js/direction.js"></script>
+<script src="js/document.js"></script>
+<script src="js/parser.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/selection.js"></script>
+<script src="js/commands.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

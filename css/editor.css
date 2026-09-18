@@ -1,0 +1,6 @@
+#editor{flex:1;width:100%;min-height:0;resize:none;border:0;outline:0;padding:28px 30px;background:var(--editor-bg);color:var(--text);font-family:var(--editor-font,Tahoma,"Segoe UI",Arial,sans-serif);font-size:var(--editor-size,16px);line-height:1.9;tab-size:4;overflow:auto}#editor::placeholder{color:var(--muted)}
+
+#editor{font-kerning:normal;text-rendering:optimizeLegibility}
+
+.project-dash { margin:2px 0; }
+.preview-pane a { cursor:pointer; }
