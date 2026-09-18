@@ -1,19 +1,29 @@
-# Mahdi Notes Editor v8 Static — Clean Build
+# NotePad
 
-نسخه بازطراحی‌شده بر پایه `mahdi-notes-editor-v8-static-v8`.
+A lightweight, offline-first Persian note editor with live preview, custom Markdown syntax, themes, and local storage.
 
-تغییرات این بیلد:
-- سیستم حرکت خودکار اسکرول و تنظیم درصد اسکرول کاملاً حذف شده است.
-- ویرایشگر اسکرول مستقل و طبیعی دارد و کرسر دیگر با منطق مصنوعی جابه‌جا نمی‌شود.
-- نسبت Editor / Preview با یک Divider واقعی و پایدار قابل تغییر است.
-- نسبت از ۲۵٪ تا ۷۵٪ قابل تنظیم است و با Refresh/Reload حفظ می‌شود.
-- ذخیره خودکار از ۱۰۰ms تا ۵ ثانیه قابل تنظیم است؛ پیش‌فرض ۲۵۰ms.
-- Session Recovery علاوه بر SessionStorage یک snapshot تا ۳۰ روز نگه می‌دارد.
-- Alert اختصاصی و غیرمسدودکننده جای alertهای مرورگر را گرفته است.
-- فقط شوخی شبکه‌کار باقی مانده و سایر افکت‌های شوخی/حرارتی حذف شده‌اند.
-- Theme switching، کدهای بلااستفاده مرتبط با تم و اسکرول حذف شده‌اند.
-- Command Palette، Focus، Read Only، Import/Export و همگام‌سازی بین تب‌ها حفظ شده‌اند.
-- قبل از unload آخرین تغییرات ذخیره می‌شوند.
-- ساختار CSS ساده‌تر و طراحی کلی یکدست‌تر شده است.
+## Features
 
-برای اجرا فقط `index.html` را باز کنید.
+- RTL Persian-friendly editor
+- Live preview
+- Reading mode
+- LocalStorage & auto-save
+- Session recovery
+- 5 themes — 4 dark + 1 light
+- 10 font options
+- Resizable editor & preview
+- Custom context menu
+- Responsive UI
+- Single-file HTML release
+
+## Custom Markdown
+
+### Headings
+
+```text
+h1 Title h1E
+h2 Subtitle h2E
+h3 Section h3E
+h4 Heading h4E
+h5 Heading h5E
+h6 Heading h6E
