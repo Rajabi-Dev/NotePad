@@ -1721,3 +1721,88 @@ Record TXT رکورد مهمی است.
 
 رکورد SPF مشخص میکند که اگر مجموعه بخواد ایمیل بزنه مبدا های مجاز چیست ؟
 =============================================================================================================================================
+**HTTP 0.9**
+**1991**
+
+- only get method 
+- without headers
+- HTML only Response
+
+در HTTP 0.9 درخواست فقط یک خط بود و شامل متد GET و مسیر Resource می‌شد. در این نسخه فقط متد GET وجود داشت و مفاهیمی مانند Request/Response Header، Status Code و Headerهایی مثل Content-Type و Content-Length وجود نداشتند.
+
+کلاینت Resource را از طریق اتصال TCP درخواست می‌کرد و سرور محتوای آن را مستقیماً روی همان اتصال برمی‌گرداند. چون Status Code وجود نداشت، خطاهایی مثل 404 Not Found نیز به شکل استاندارد قابل اعلام نبودند. همچنین پایان Response معمولاً با بسته‌شدن اتصال TCP مشخص می‌شد.
+
+پروتکل HTTP/0.9 بسیار ساده بود و برای وب اولیه طراحی شده بود؛ قابلیت‌هایی مثل Cookie، Authentication، Cache-Control و Content Negotiation در آن وجود نداشتند و در نسخه‌های بعدی HTTP اضافه شدند.
+
+code:text
+GET /index.html
+<html>
+      <h1>Hello Web</h1>
+</html>
+codeE
+
+code:text
+ <html> 
+      <h1>Hello Web</h1> 
+</html> 
+codeE
+
+---
+
+**HTTP 1.0**
+**1996**
+
+- Method (GET , Post , Head)
+- Status Code
+- Headers
+- Non Persistent Connections
+
+در HTTP/1.0 ساختار Request و Response رسمی‌تر شد و متدهایی مانند HEAD و POST به‌کار گرفته شدند. این تغییرات وب را از یک سیستم عمدتاً خواندنی به بستری برای ارسال داده و تعامل با Server نزدیک‌تر کرد.
+
+در Request، Request-Line شامل Method، مسیر Resource و نسخه HTTP است و در Response، Status-Line نتیجه پردازش درخواست را با Status Code اعلام می‌کند. بنابراین Client بدون تحلیل محتوای HTML می‌تواند متوجه شود درخواست موفق بوده، خطا رخ داده یا Resource به آدرس دیگری منتقل شده است. Headerها نیز Metadata را وارد ساختار HTTP کردند.
+ از این طریق اطلاعاتی مانند Content-Type، Content-Length، Date، Server و اطلاعات مربوط به Cache و Content Negotiation قابل انتقال شدند. Cookie و Authentication نیز در ادامه بر پایه همین Headerها به HTTP اضافه و رایج شدند.
+
+در HTTP/1.0 اتصال‌ها به‌صورت پیش‌فرض Persistent نبودند؛ بنابراین در الگوی رایج برای دریافت Resourceهای مختلف مانند HTML، CSS، JavaScript و Image، Client معمولاً اتصال TCP جداگانه ایجاد می‌کرد، Handshake انجام می‌شد، Response دریافت می‌شد و اتصال بسته می‌شد. این موضوع برای صفحات دارای Resourceهای متعدد باعث افزایش Latency و هزینه‌ی TCP Handshake می‌شد.
+
+code:text
+GET /logo.png HTTP/1.0
+User-Agent: Example
+Accept: image/png
+codeE
+
+code:text
+HTTP/1.0 200 OK
+Content-Type: image/png
+Content-Length: 1842
+
+[binary image bytes]
+codeE
+
+---
+
+**HTTP 1.1** 
+**1996**
+
+- HOST
+- Persistent Connections
+- Pipelining
+- Head-Of-Line Blocking
+
+در HTTP 1.1  هدر اجباری HOST باعث شد چند دامنه بتوانند روی یک آیپی مشترک سرو شوند . قبل از آن برروی یک آیپی یک دامنه سرو میشد اما با HOST مفاهیمی مانند Virtual Hosting ها و CDN و Reverse Proxy ها و میزبانی اقتصادی وب ممکن شد . در این نسخه اتصال TCP به صورت پیش فرض قابل استفاده مجدد شد . چند درخواست و پاسخ میتوانند از یک کانکشن عبور کنند و هزینه هندشیک و  TCP slow start بین فایل های یک صفحه تقسیم شود . انیکار سرعت بارگزاری را بهتر کرد هرچند در این مکانیزم ترتیب درخواست ها و پاسخ ها اهمیت بسیار زیادی داشت . 
+مفهوم Pipelining اجازه میدهد کلاینت چند درخواست را بدون انتظار برای پاسخ قبلی پشت سرهم ارسال کند مشکل اینجاست که سرور باید پاسخ هارا دقیق با همان ترتیب برگرداند به همین دلیل این قابلیت قابل اعتماد و محبوب نبود . 
+مفهوم Hand-of-Life یعنی یک درخواست کند میتواند صف پاسخ هارا قفل کند . حتی اگر پاسخ درخواست های دوم یا سوم آماده باشد بخاطر الزام حفظ ترتیب اجازه ندنارد قبل از پاسخ اول برگردد . این مشکل انگیزه طراحی multiplexing در نسخه HTTP/2 بود . 
+
+code:text
+GET /logo.png HTTP/1.1
+HOST : example.ir
+Accept-Encoding : gzip
+Connection: keep-alive
+codeE
+
+code:text
+HTTP/1.1 200 OK
+Transfer-Encoding : chunked
+Cache-Control : max-age=3600
+
+[chunk bytes]
+codeE
