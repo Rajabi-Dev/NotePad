@@ -1806,3 +1806,612 @@ Cache-Control : max-age=3600
 
 [chunk bytes]
 codeE
+=====================================================================================================================================================
+Virtual LAN (VLAN)
+
+- Virtual LAN (VLAN)
+- Logical Network Segmentation
+- Switch
+- VLAN ID
+- Access VLAN
+- Voice VLAN
+
+VLAN ابزاری برای Logical Network Segmentation در Switchها است.
+
+مشخصات VLAN
+
+هر VLAN دارای دو مشخصه است:
+
+- Name
+- VLAN ID
+
+نام VLAN هیچ تأثیری در عملکرد آن ندارد و فقط برای مدیریت و خوانایی بهتر استفاده می‌شود.
+
+محدوده VLAN ID
+
+نوع                 بازه
+Standard Range      1 - 1005
+Extended Range      1006 - 4094
+
+Interfaceها عضو VLANها می‌شوند.
+
+VLAN 1
+
+پورت‌های Access به‌صورت پیش‌فرض عضو VLAN 1 هستند.
+
+VLANهای رزروشده
+
+VLANهای 1002 تا 1005 برای پروتکل‌های قدیمی FDDI و Token Ring رزرو شده‌اند. این VLANها نباید مانند VLANهای عادی برای پورت‌های کاربر استفاده شوند.
+
+VLANهای Extended به‌صورت پیش‌فرض قابل استفاده نیستند.
+
+نحوه قابل استفاده کردن Extended VLAN:
+
+vtp mode off
+
+یا:
+
+use vtp version-3
+vtp mode transparent
+
+VTP
+
+- VTP
+- VTP Server
+- VTP Transparent
+- VTPv3
+
+VTP برای مدیریت و انتقال اطلاعات VLAN بین سوییچ‌ها استفاده می‌شود.
+
+در حالت VTP Server می‌توان VLAN را ساخت و اطلاعات VLAN طبق تنظیمات VTP به سوییچ‌های دیگر منتقل می‌شود.
+
+در حالت VTP Transparent سوییچ VLANها را به‌صورت Local مدیریت می‌کند.
+
+در VTPv3 می‌توان VTP را با دستور زیر خاموش کرد:
+
+vtp mode off
+
+اگر کار نکرد:
+
+vtp mode transparent
+
+ساخت، حذف و نمایش VLAN
+
+// CREATE & CONFIG VLAN
+vlan number
+name yourname
+// DELETE VLAN
+no vlan number
+// SHOW VLAN
+show vlan
+show vlan brief
+
+Access VLAN
+
+switchport mode access
+switchport access vlan number
+
+switchport mode access پورت را Access می‌کند.
+
+switchport access vlan number پورت را عضو VLAN می‌کند.
+
+پورت زمانی می‌تواند به‌صورت مستقیم عضو یک VLAN باشد که در حالت Access باشد.
+
+اگر یک VLAN وجود نداشته باشد و Interface را عضو آن VLAN کنی، VLAN ساخته می‌شود.
+
+اگر یک VLAN را پاک کنی و Interface هنوز عضو آن باشد، Interface دیگر VLAN معتبر ندارد و می‌تواند به حالت Inactive برود.
+
+قبل حذف VLAN بهتر است ابتدا پورت‌های عضو آن را از VLAN خارج کنیم.
+
+VLAN در Router
+
+ساخت VLAN در روتر تفاوت دارد.
+
+vlan database
+vlan 10 name yourname
+
+VOICE VLAN
+
+- Voice VLAN
+- Data VLAN
+- Voice
+- Data
+
+VLAN تلفن و کامپیوتر می‌تواند جدا باشد، چرا که ترافیک Voice و Data باید از هم جدا شود.
+
+برای این کار از دستور:
+
+switchport voice vlan 90
+
+بر روی همان پورتی که برای سیستم کانفیگ کردیم استفاده می‌کنیم.
+
+مثلاً:
+
+switchport mode access
+switchport access vlan 10
+switchport voice vlan 90
+VLAN 10 -> Data VLAN
+VLAN 90 -> Voice VLAN
+
+ابتدا سیستم‌ها و باقی اجزای شبکه را VLAN‌بندی کن و در آخر Voice VLAN را انجام بده.
+
+برای مشاهده وضعیت Switchport و تشخیص Access VLAN و Voice VLAN استفاده می‌شود:
+
+show interface fa0/1 switchport
+
+TRUNK
+
+- TRUNK
+- ISL
+- Inter-Switch Link
+- 802.1Q
+- IEEE Standard
+- DTP
+
+ISL
+
+- Inter-Switch Link
+- Cisco proprietary
+- Trunking
+
+اولین روش Trunking سیسکو است.
+
+Frame را به‌صورت ISL Encapsulate می‌کند و اطلاعات VLAN داخل Header قرار می‌گیرد.
+
+ISL دارای Header و Trailer است.
+
+Overhead آن بیشتر از 802.1Q است.
+
+802.1Q
+
+- IEEE Standard
+- VLAN ID
+- Tag
+- FCS
+
+قابل استفاده در تجهیزات مختلف است.
+
+802.1Q یک Tag چهار بایتی به Frame اضافه می‌شود.
+
+در این Tag فیلدی به نام VLAN ID وجود دارد.
+
+VLAN ID برابر 12 بیت است.
+
+در 802.1Q بسته‌بندی مجدد به روش ISL انجام نمی‌شود، بلکه یک Tag چهار بایتی به Frame اضافه می‌شود.
+
+بعد از تغییر Frame مقدار FCS دوباره محاسبه می‌شود.
+
+802.1Q سبک‌تر از ISL است.
+
+پس هر دو Trunk یک کار انجام می‌دهند اما با یک روش متفاوت.
+
+ISL قدیمی است و امروزه بیشتر از 802.1Q استفاده می‌شود.
+
+دیفالت سوییچ‌های سیسکو ISL است، مگر آنکه ساپورت نکند.
+
+DTP
+
+- Dynamic Trunking Protocol
+- Access
+- Trunk
+- Auto
+- Desirable
+
+Dynamic Trunking Protocol یک پروتکل Cisco برای مذاکره و تشخیص Trunk بودن Interface است.
+
+در حالت Access یا Trunk می‌توان DTP را خاموش کرد.
+
+در حالت Auto و Desirable برای مذاکره Trunk به DTP نیاز داریم.
+
+interface fa0/1
+switchport mode access
+
+پورت Access می‌شود و می‌تواند در یک VLAN عضو شود.
+
+switchport mode dynamic auto
+
+اگر دستگاه مقابل با DTP پیشنهاد Trunk شدن بدهد، سوییچ می‌تواند Trunk شود و در غیر این صورت Access خواهد بود.
+
+switchport mode dynamic desirable
+
+مثل حالت بالا است، با این تفاوت که سوییچ نیز برای Trunk شدن پیشنهاد می‌دهد.
+
+switchport mode trunk
+
+پورت Trunk می‌شود و می‌تواند ترافیک چند VLAN را عبور دهد.
+
+پورت کاربر نباید Trunk شود و باید Access باشد.
+
+Trunk Encapsulation
+
+switchport trunk encapsulation isl
+switchport trunk encapsulation dot1q
+
+اگر سوییچ ISL را پشتیبانی نکند، این دستورات را ندارد.
+
+اگر سوییچ چند Encapsulation را پشتیبانی کند، می‌توان Encapsulation را مشخص کرد.
+
+switchport trunk encapsulation negotiate
+
+حالت مذاکره برای انتخاب Encapsulation در تجهیزات قدیمی است.
+
+برای مشاهده وضعیت:
+
+show interface fa0/1 switchport
+show interface trunk
+
+show interface trunk برای نمایش Trunkها استفاده می‌شود.
+
+در حالت Access یا Trunk می‌توان DTP را خاموش کرد، اما در حالت Auto و Desirable، DTP حتماً باید فعال باشد.
+
+switchport nonegotiate
+
+خاموش کردن DTP.
+
+ابتدا باید پورت را Access یا Trunk کنیم و بعد DTP را خاموش کنیم.
+
+Interface Range
+
+interface range e0/1 , e0/3
+
+Native VLAN
+
+- Native VLAN
+- Trunk
+- Tagged
+- Untagged
+
+سوییچ‌ها ترافیکی را از خودشان عبور می‌دهند که VLAN آن را داشته باشند.
+
+Native VLAN: ترافیک وقتی از سوییچ خارج می‌شود Tag نمی‌خورد.
+
+کاربر در Native VLAN ترانک‌ها نباید باشد.
+
+switchport trunk native vlan vlannumber
+
+با دستور زیر Native VLAN دیگر نداریم:
+
+vlan dot1q tag native
+
+Native VLAN به چه درد می‌خورد؟
+
+1:08 کپچر 9 یک
+
+به‌صورت پیش‌فرض ترانک‌ها ترافیک همه VLANها را عبور می‌دهند، فقط بعضی اوقات ما می‌خواهیم محدودش کنیم.
+
+Trunk Allowed VLAN
+
+switchport trunk allowed vlan vlannumbers
+none
+except 50
+all -> default
+
+SNMP
+
+- SNMP
+- SNMP Manager
+- MIB
+- Management Information Base
+- SNMPv1
+- SNMPv2c
+- SNMPv3
+- SNMP Trap
+
+MIB
+
+MIB یا Management Information Base است.
+
+تمام اجزای روتر در آن وجود دارند، ریل‌تایم هستند و مقادیر Live هستند.
+
+فکر کنم لیست یه سری مقادیر رو می‌توانیم از روتر بخواهیم.
+
+SNMP Version 1
+
+- SNMP Version 1
+- 32-bit
+- Community String
+
+متغیرهای 32 بیتی هستند.
+
+مثلاً نمی‌تواند اعداد بزرگ را بخواند.
+
+مشکل دوم امنیت به‌وسیله عبارت Community String تأمین می‌شود که در بسته SNMP دیده می‌شود.
+
+SNMP Version 2c
+
+- SNMP Version 2c
+- Variable
+- Counter
+- 64-bit
+- Community String
+
+Variable و Counter برابر 64 بیت هستند.
+
+امنیت همانند نسخه قبلی مشکل‌دار می‌باشد.
+
+SNMP Version 3
+
+- SNMP Version 3
+- NoAuth
+- Auth
+- Priv
+- Authentication
+- Encryption
+
+مشکل اندازه که در ورژن دوم حل شد.
+
+سه سطح امنیتی دارد:
+
+noauth -> بدون احراز هویت و بدون رمزنگاری
+auth   -> احراز هویت و بدون رمزنگاری
+priv   -> احراز هویت و رمزنگاری
+
+اتصال EVE به سیستم واقعی
+
+اتصال موجودیت EVE به سیستم واقعی.
+
+برای SNMP ورژن سوم اول باید یه گروه بسازیم.
+
+config > server group groupname
+config > server group groupname v3 priv (sec type)
+
+دستور ساخت گروه.
+
+برای ساخت User:
+
+config > snmp-server user Username Groupname v3 auth sha PassworduserCreated priv aes 128 slkadjfklsjkdfj access SNMP-ACL
+
+به‌صورت پیش‌فرض Read Only هست، Write کردنش دردسر داره.
+
+بخشی تنظیمات احراز هویت:
+
+auth sha Password
+
+بخش تنظیمات رمزنگاری:
+
+priv aes 128 slkadjfklsjkdfj
+
+SHA الگوریتم انتقال پسورد.
+
+AES 128 الگوریتم رمزنگاری است که 256 هم دارد.
+
+بعدی هم کلید رمزنگاری است که 8 کاراکتر باید باشد.
+
+access SNMP-ACL ای‌سی‌ال هست. البته ورژن سه نیازی نداره ولی بدم نیست بهش بدی.
+
+کپچر 9 پارت دوم برای راه‌اندازی PRTG و اتصال روتر EVE به سیستم دیده شود.
+
+حتی SNMP توانایی جمع‌آوری Eventها را دارد، یعنی Interface مثلاً Up شد که در این صورت SNMP به SNMP Server اعلام می‌شود.
+
+SNMP Trap
+
+برای راه‌اندازی SNMP Trap:
+
+snmp-server host 172.0.0 version 2c Hamed
+snmp-server enable trap
+172.0.0 -> SNMP Server Address
+
+اگر Trap ورژن سوم بود:
+
+snmp-server host 172.0.0 version 2c Hamed version 3 priv username
+
+STP
+
+- STP
+- Broadcast
+- Multicast
+- Unknown Unicast
+- MAC Flap
+- Root Bridge
+- Root Port
+- Designated Port
+- BPDU
+- RSTP
+- PVSTP
+- Rapid PVSTP
+- MSTP
+
+در بسته‌های Broadcast، Multicast و Unknown Unicast ممکن است مشکلات STP ایجاد شود.
+
+MAC Flap
+
+علت اتصال دو کابل به سوییچ، Redundancy می‌باشد.
+
+اتفاقاتی که در Root Bridge می‌افتد:
+
+- انتخاب Root Bridge
+- انتخاب Root Port
+- انتخاب Designated Port
+
+Root Bridge
+
+Root Bridge سوییچی است که با مرکزیت قرار دادن آن، محاسبه برای پیدا کردن Loop انجام می‌شود.
+
+سوییچ تأثیرگذاری است چون نقطه مرکزی شبکه است.
+
+کسی Root Bridge می‌شود که کوچک‌ترین Bridge ID را داشته باشد.
+
+BID
+
+همه سوییچ‌ها تصور می‌کنند خودشان Root Bridge هستند.
+
+پس به محض روشن شدن، یه بسته STP می‌سازن و در همه پورت‌ها می‌دهند بیرون و می‌گن من فلانی هستم، Root Bridge شما هستم.
+
+بعد بغلیش هم این کار رو می‌کنه. وقتی می‌بینه بغلی بهتر از خودشه، می‌گه من فلانی‌ام و Root Bridge بغلی هست.
+
+بعد می‌بینه عه، بالایی بهتره، بعدش می‌گه بالایی.
+
+یه جایی بالاخره بهترین پیدا می‌شود.
+
+مرحله دوم: انتخاب Root Port
+
+همه سوییچ‌ها به‌جز Root Bridge باید یه پورت رو به‌عنوان Root Port انتخاب کنند، بلااستثنا.
+
+این انتخاب بر اساس جدول Cost و Speed است.
+
+speed    | cost
+10Mbps   | 100
+100Mbps  | 19
+1Gbps    | 4
+10Gbps   | 2
+
+فرمول خاصی ندارد، اما هرچی سرعت بیشتر باشه، لول بهتری داره.
+
+انتخاب Root Port
+
+- پورتی که سوییچ به‌وسیله آن به Root Bridge برسد.
+- پورتی که سوییچ به‌وسیله آن با کمترین Cost به Root Bridge برسد.
+- پورتی که به سوییچی با BID کمتری متصل شده است.
+- پورتی که شماره آن در آن طرف لینک کوچک‌تر باشد.
+
+انتخاب Designated Port
+
+هر ارتباط در STP فقط دو حالت زیر را خواهد داشت.
+
+هر ارتباط در STP دو حالت داره:
+
+- Root Port
+- Designated Port
+
+مقایسه بر اساس موارد زیر انجام می‌شود:
+
+- کدام یک Cost کمتری تا Root Bridge دارد.
+- کدام یک نسبت به دیگری BID کوچک‌تری دارد.
+
+برنده مقایسه Designated و بازنده Block می‌شود.
+
+محل اشتباه در Root Bridge اینه که ترافیک تو شبکه الکی می‌چرخه.
+
+BPDU
+
+- Bridge Protocol Data Unit
+- Hello Time
+- Forward Delay
+- Max Age
+
+BPDU بسته STP است که به‌صورت مدام در حال ارسال است.
+
+در کل ساختار شبکه فقط Root Bridge حق ارسال BPDU دارد.
+
+Hello Time   = 2 sec -> بازه زمانی تولید BPDU
+Forward Delay = 15 sec
+Max Age       = 20 sec
+
+Root Bridge هر دو ثانیه باید BPDU تولید کند و روی پورت‌های خود که Designated هستند ارسال می‌کند.
+
+زمانی که سوییچ‌ها BPDU دریافت می‌کنند، بسته رو ادیت می‌کنند و روی Designated Portها می‌فرستند.
+
+تا ته شبکه می‌رود، بعد میره مقایسه‌ها رو انجام می‌ده، یه سری پورت‌ها Block می‌شن و یه سری Root می‌شن.
+
+هر دو ثانیه این اتفاق تکرار می‌شد.
+
+نکته: پورت‌های Block بسته بهشون می‌رسه، بعد راهش نمی‌دن.
+
+نمایش وضعیت STP
+
+show spanning tree
+
+نمایش وضعیت STP.
+
+اولین خط VLAN هست.
+
+نسخه اورجینال STP VLAN نمی‌فهمید، اما نسخه PVSTP می‌فهمه.
+
+نسخه بعدی STP هم VLAN نمی‌فهمید، اما سیسکو تبدیل کرد به Rapid PVSTP.
+
+یعنی همه محاسبات در هر VLAN یه دور انجام می‌شود، به‌ازای هر VLAN یک بار اجرا می‌شود و به‌صورت مجزا است.
+
+PVSTP
+
+PVSTP از ۱۲۸ VLAN پشتیبانی می‌کند.
+
+حتی نسخه Rapid PVSTP هم ۱۲۸ تاست، اما نسخه بعدی بیشتر می‌فهمه.
+
+STP  -> IEEE
+RSTP -> RSTP
+MSTP -> MSTP
+
+قسمت بعدی مشخصات Root Bridge است.
+
+قسمت بعدی مشخصات همان سوییچ می‌باشد.
+
+Root Bridge هر دو ثانیه یه BPDU از همه پورت‌ها تولید می‌کند.
+
+دستگاه‌های دیگر که از Root Port دریافت می‌کنند، به Designated Portها ارسال می‌کنند، اما روی Block حق ارسال ندارند.
+
+STP Port States
+
+- Listening
+- Learning
+- Forwarding
+- Blocking
+- Max Age
+
+listening
+learning
+forwarding
+blocking
+max age
+
+STP به شما Redundancy می‌دهد و این Redundancy، ۳۰ ثانیه زمان می‌برد.
+
+منظور از دایامیتر چیه؟
+
+Link Failure
+
+- Link Failure
+- Direct Link Failure
+- Indirect Link Failure
+
+link failure
+
+direct link failure  -> LED turn off
+indirect link failure -> LED stays on
+
+خرابی‌های پورت و لینک.
+
+Max Age کارش تشخیص خرابی غیرمستقیم است.
+
+RSTP
+
+- RSTP
+- Alternate
+- Backup
+- Root
+- Designated
+- Block
+
+در RSTP:
+
+Alternate -> جانشین Root
+Backup    -> جانشین Designated
+
+اما تایمرها حذف نشده است.
+
+در اصل Alternateها Block هستند:
+
+Block Alternate
+
+Backup رو در صورتی می‌بینی که دستگاه دوم مثل هاب STP نفهمه. در این صورت Designated Port سمت Root Bridge بلاک می‌شود.
+
+بلاک و Discard و Listening.
+
+تغییر به RSTP
+
+spanning-tree mode
+
+- pvst
+- rapid-pvst
+- mst
+
+می‌تونیم این سه گزینه رو بذاریم.
+
+این دو پروتکل باهم کار می‌کنند، اما سرعت زیاد RSTP زمانی داری که هردو RSTP باشند.
+
+مواردی که ادمین شبکه باید در خصوص STP انجام بده
+
+- Change STP to RSTP
+- انتخاب Root Bridge به‌صورت دستی
+- پیاده‌سازی فیچری به نام PortFast
+
+
