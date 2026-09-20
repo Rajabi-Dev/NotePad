@@ -1,0 +1,1723 @@
+پروتکل HTTP چیست ؟
+
+- Application Layer
+- Client / Server
+- Request / Response
+- Stateless
+
+پروتکل HTTP در لایه Application است که برای ارتباط بین Client و Server و انتقال Resource ها در Web استفاده می‌شود. Client می‌تواند با HTTP یک Resource را درخواست کند، داده‌ای را برای Server ارسال کند یا بخشی از یک Resource را دریافت یا تغییر دهد.
+
+در HTTP، Client یک Request ارسال می‌کند و Server در پاسخ یک Response برمی‌گرداند. پیامی که از طرف Client ارسال می‌شود Request نام دارد و پاسخی که Server برمی‌گرداند Response نام دارد.
+
+Components of HTTP-based systems
+
+- Client / User Agent
+- Server
+- Proxy
+- Cache
+- Load Balancer
+
+کلاینت موجودیتی است که Request را ارسال می‌کند. معمولا Web Browser نقش Client یا User Agent را دارد، اما User Agent لزوما Browser نیست و می‌تواند یک Crawler، Robot یا برنامه دیگری باشد.
+
+در واقع Web Page فقط یک فایل نیست و می‌تواند از چندین Resource مانند HTML، CSS، JavaScript و Image تشکیل شود. Browser ابتدا HTML را دریافت می‌کند و سپس با بررسی آن مسیر Resource های موردنیاز را پیدا می‌کند و برای دریافت هر Resource یک Request جداگانه ارسال می‌کند. JavaScript نیز می‌تواند بعدا Request های جدیدی ایجاد کند و بدون دریافت مجدد کل صفحه فقط بخشی از آن را تغییر دهد.
+
+سرور نیز لزوما یک کامپیوتر نیست و ممکن است شامل چندین Server یا Component مختلف باشد. برای مثال چند Server می‌توانند با استفاده از Load Balancing بار Request ها را بین خود تقسیم کنند و Component هایی مانند Cache و Database نیز می‌توانند در تولید Response نقش داشته باشند.
+
+در HTTP/1.1 چندین Web Site می‌توانند یک IP مشترک داشته باشند و Client با استفاده از Host مشخص می‌کند Request مربوط به کدام سایت است.
+
+بین Client و Server ممکن است سیستم‌هایی در لایه Application قرار داشته باشند که معمولا Proxy نام دارند. Proxy می‌تواند Request را بدون تغییر منتقل کند یا قبل از ارسال آن را بررسی یا تغییر دهد.
+
+پروکسی‌ها می‌توانند وظایف مختلفی انجام دهند مانند:
+اول : Cache برای نگهداری موقت Resource ها
+دوم : Filtering برای بررسی یا محدود کردن Traffic
+سوم : Load Balancing برای تقسیم Request ها بین چند Server
+چهارم : Authentication برای کنترل دسترسی
+پنجم : Logging برای ثبت اطلاعات مربوط به Request ها
+
+ویژگی های HTTP
+
+- Human Readable
+- Headers
+- Extensible
+- Stateless
+
+پروتکل HTTP در نسخه‌های اولیه به صورت قابل خواندن برای انسان طراحی شده بود و همین موضوع بررسی و تست Request و Response را ساده می‌کرد. در HTTP/2 و HTTP/3 داده‌ها روی Wire به صورت Binary منتقل می‌شوند، اما مفهوم منطقی Request و Response همچنان حفظ شده است.
+
+یکی از ویژگی‌های مهم HTTP وجود Header ها است که از HTTP/1.0 وارد ساختار رسمی Request و Response شدند و امکان انتقال Metadata و توسعه پروتکل را فراهم کردند. Client و Server می‌توانند با استفاده از Header ها اطلاعاتی مانند نوع محتوا، طول داده، Cache، Cookie و بسیاری از تنظیمات دیگر را منتقل کنند.
+
+پروتکل HTTP به صورت ذاتی Stateless است. یعنی هر Request مستقل است و HTTP به خودی خود اطلاعاتی از Request های قبلی را نگه نمی‌دارد. برای مرتبط کردن چند Request مختلف به یک کاربر یا یک تعامل مشخص از مفهوم Session استفاده می‌شود.
+
+مفهوم Stateless یعنی HTTP به طور ذاتی وضعیت Request های قبلی را نگه نمی‌دارد.
+مفهوم Session یعنی ایجاد یک وضعیت مشترک بین چند Request برای مرتبط کردن آن‌ها با یکدیگر.
+
+برای حفظ Session معمولا از Cookie و Session ID استفاده می‌شود.Browser شناسه Session را در Request های بعدی ارسال می‌کند و Server با استفاده از آن Request ها را به همان Session مرتبط می‌کند.
+
+HTTP و Connection
+
+- TCP
+- Persistent Connection
+- Multiplexing
+- QUIC
+
+کانکشن در لایه Transport مدیریت می‌شود و مستقیما جزو HTTP نیست. HTTP به یک Transport مناسب برای انتقال داده نیاز دارد.
+
+در HTTP/1.0 معمولا برای هر Request و Response یک TCP Connection جداگانه ایجاد می‌شد. ایجاد Connection جدید باعث افزایش Round Trip و هزینه TCP Handshake می‌شد.
+
+پروتکل HTTP/1.1 برای کاهش این مشکل Persistent Connection را معرفی کرد. در این روش یک TCP Connection می‌تواند برای چندین Request و Response مورد استفاده قرار بگیرد.
+
+پروتکل HTTP/2 این روند را با Multiplexing بهبود داد. در این روش چندین Stream می‌توانند به صورت همزمان روی یک TCP Connection منتقل شوند.
+
+پروتکل HTTP/3 نیز به جای TCP از QUIC استفاده می‌کند. QUIC روی UDP ساخته شده و قابلیت‌های لازم برای انتقال قابل اعتماد و کارآمد را در اختیار HTTP قرار می‌دهد.
+
+روند کلی:
+
+code:text
+HTTP/1.0 → برای هر Request یک Connection
+HTTP/1.1 → چند Request روی یک Connection
+HTTP/2 → چند Stream همزمان روی یک Connection
+HTTP/3 → HTTP روی QUIC
+codeE
+
+Pipelining
+
+- Multiple Requests
+- Ordered Responses
+- Head-Of-Line Blocking
+
+در HTTP/1.1، Pipelining اجازه می‌دهد Client چند Request را بدون انتظار برای Response قبلی پشت سرهم روی یک Connection ارسال کند، اما Server باید Response ها را دقیقا به همان ترتیب Request ها برگرداند.
+
+به همین دلیل اگر Response مربوط به Request اول کند باشد، Response های بعدی نیز ممکن است منتظر بمانند. به این مشکل Head-Of-Line Blocking گفته می‌شود.
+
+در Multiplexing، چندین Stream می‌توانند به صورت درهم‌آمیخته منتقل شوند و Frame های مربوط به Stream های مختلف منتظر یکدیگر نباشند.
+
+HTTP/2
+
+- Binary Frames
+- Multiplexing
+- Header Compression
+
+در HTTP/2 پیام‌های HTTP داخل ساختارهای باینری به نام Frame منتقل می‌شوند. این ساختار قابلیت‌هایی مانند Multiplexing و فشرده‌سازی Header ها را فراهم می‌کند.
+
+با وجود تغییر نحوه انتقال روی Wire، مفهوم منطقی Request و Response همچنان حفظ شده است و به همین دلیل شناخت ساختار HTTP/1.1 برای درک HTTP/2 اهمیت زیادی دارد.
+
+Caching
+
+- Cache-Control
+- Expires
+- ETag
+
+پروتکل HTTP می‌تواند مشخص کند چه Resource هایی در Cache ذخیره شوند و چه مدت معتبر بمانند. این کار باعث کاهش Request ها و افزایش سرعت دریافت Resource ها می‌شود.
+
+Origin و CORS
+
+- Origin
+- Same-Origin Policy
+- CORS
+
+بروزر به صورت پیش‌فرض دسترسی یک Origin به Resource های Origin دیگر را محدود می‌کند. Server می‌تواند با استفاده از Header های CORS مشخص کند چه دسترسی‌هایی بین Origin های مختلف مجاز هستند.
+
+Authentication
+
+- WWW-Authenticate
+- Authorization
+- Cookie / Session
+
+پروتکل HTTP می‌تواند برای کنترل دسترسی به Resource های محافظت شده استفاده شود. مکانیزم‌هایی مانند WWW-Authenticate و Authorization برای Authentication وجود دارند و Web Application ها نیز می‌توانند از Cookie و Session برای مدیریت Login کاربران استفاده کنند.
+
+Proxy و Tunneling
+
+- HTTP Proxy
+- SOCKS
+- Tunneling
+
+درخواست ها می‌توانند از طریق Proxy بین Client و Server منتقل شوند. Proxy می‌تواند برای Cache، Filtering، Logging یا کنترل Traffic استفاده شود.
+
+همه Proxy ها لزوما HTTP Proxy نیستند. برای مثال SOCKS در لایه پایین‌تری فعالیت می‌کند و می‌تواند انواع مختلفی از Traffic را منتقل کند.
+
+ساختار HTTP Request
+
+- Method
+- Request Target
+- HTTP Version
+- Headers
+- Body
+
+هر HTTP Request شامل اطلاعاتی است که مشخص می‌کند Client چه عملیاتی را روی کدام Resource و با چه تنظیماتی می‌خواهد انجام دهد.
+
+code:text
+Method + Request Target + HTTP Version
+Headers
+Body
+codeE
+
+Method
+
+متد مشخص می‌کند Client چه عملیاتی را می‌خواهد انجام دهد. برای مثال GET معمولا برای دریافت یک Resource و POST برای ارسال داده به Server استفاده می‌شود. متدهایی مانند HEAD و OPTIONS نیز برای عملیات دیگری در HTTP وجود دارند.
+
+Request Target یا Path
+
+مسیر Resource موردنظر را مشخص می‌کند. این بخش معمولا کل URL نیست و اطلاعاتی مانند Protocol و Domain و Port که از قبل مشخص هستند حذف می‌شوند.
+
+برای مثال:
+
+code:text
+https://example.com:443/login
+codeE
+
+در Request معمولا به شکل زیر ارسال می‌شود:
+
+code:text
+/login
+codeE
+
+HTTP Version
+
+نسخه پروتکل HTTP مورد استفاده را مشخص می‌کند.
+
+code:text
+HTTP/1.1
+codeE
+
+Headers
+
+هدر ها اطلاعات اضافی درباره Request را به Server می‌دهند. برای مثال Host، User-Agent، Accept و Cookie.
+
+Body
+
+در بعضی Request ها داده‌ای که Client برای Server ارسال می‌کند در Body قرار می‌گیرد. برای مثال داده‌های یک Form یا JSON.
+
+در نتیجه می‌توان یک HTTP Request را به صورت ساده اینگونه دید:
+
+code:text
+Method + Path + HTTP Version
+Headers
+Body
+codeE
+
+ساختار HTTP Response
+
+- HTTP Version
+- Status Code
+- Status Message
+- Headers
+- Body
+
+هر HTTP Response شامل اطلاعاتی است که نتیجه Request را مشخص می‌کند.
+
+code:text
+HTTP Version + Status Code + Status Message
+Headers
+Body
+codeE
+
+Status Code
+
+نتیجه Request را مشخص می‌کند و نشان می‌دهد درخواست موفق بوده یا خطایی رخ داده است.
+
+code:text
+200 → Success
+301 → Redirect
+404 → Not Found
+500 → Server Error
+codeE
+
+Status Message
+
+توضیح کوتاهی درباره Status Code است و نقش اصلی در تعیین نتیجه Request ندارد.
+
+Headers
+
+اطلاعات اضافی درباره Response را در اختیار Client قرار می‌دهند؛ مانند Content-Type، Content-Length، Set-Cookie و Cache-Control.
+
+Body
+
+در صورت وجود، محتوای Resource یا داده‌ای که Server در پاسخ ارسال می‌کند در Body قرار می‌گیرد.
+
+API های مبتنی بر HTTP
+
+- Fetch API
+- SSE
+- HTTP API
+
+در واقع API راهی برای ارتباط بین نرم‌افزارها است. در Web معمولا HTTP برای انتقال Request و Response بین Client و Server استفاده می‌شود.
+اما Fetch API یک API در Browser است که به JavaScript اجازه می‌دهد HTTP Request ارسال و HTTP Response دریافت کند.
+
+code:text
+JavaScript
+↓
+Fetch API
+↓
+HTTP Request
+↓
+Server
+↓
+HTTP Response
+↓
+JavaScript
+codeE
+
+درواقع Server-Sent Events یا SSE روشی برای ارسال یک‌طرفه Event از Server به Client روی HTTP است. در این روش Client ابتدا Connection را ایجاد می‌کند و سپس Server می‌تواند Event های جدید را از طریق همان Connection برای Client ارسال کند.
+
+code:text
+Client
+↓
+Connection
+↓
+Server
+↓
+Event 1
+Event 2
+Event 3
+codeE
+
+پس Fetch API برای ارسال و دریافت داده توسط JavaScript استفاده می‌شود، در حالی که SSE امکان ارسال مداوم Event از Server به Client را فراهم می‌کند.
+
+=======================================================================================================================================================================================
+ منظور از Cookie چیست؟ 
+
+- Client
+- Server
+- Browser Storage
+- Session
+
+کوکی یک مقدار کوچک از اطلاعات است که Server می‌تواند با Header به Browser بفرستد. Browser آن را ذخیره می‌کند و در Request های بعدی که با Scope آن Cookie مطابقت داشته باشند، معمولا دوباره برای Server ارسال می‌کند.
+
+یکی از کاربردهای مهم کوکی، نگهداری Session است. برای مثال، کاربر Username و Password خود را ارسال می‌کند. اگر اطلاعات صحیح باشد، Server یک Session ایجاد کرده و یک Session ID را داخل کوکی قرار می‌دهد. Browser نیز این کوکی را در Request های بعدی ارسال می‌کند و Server با استفاده از Session ID متوجه می‌شود Request مربوط به کدام Session است.
+
+code:text
+Login
+↓
+Server
+↓
+Session ID
+↓
+Set-Cookie: session_id=ABC123
+↓
+Browser
+↓
+Cookie: session_id=ABC123
+↓
+Request بعدی
+↓
+Server → Session را پیدا می‌کند
+codeE
+
+اگر Session ID معتبر نباشد، Server می‌تواند Session را نامعتبر بداند و کاربر را به Login مجدد هدایت کند.
+
+سه کاربرد اصلی Cookie
+
+- Session Management
+- Personalization
+- Tracking
+
+در Session Management از کوکی برای نگه داشتن وضعیت کاربر استفاده می‌شود؛ مانند Login Status، Shopping Cart و Game Score.
+
+در Personalization، کوکی می‌تواند تنظیمات و ترجیحات کاربر را نگه دارد؛ مانند زبان، Theme و تنظیمات UI.
+
+مثلا:
+
+code:text
+theme=dark
+language=fa
+codeE
+
+در Tracking نیز می‌توان از کوکی برای ثبت و تحلیل رفتار کاربر مانند صفحات مشاهده‌شده و Analytics استفاده کرد.
+
+Cookie ≠ فقط Login
+
+چرا Cookie لازم است؟
+
+- Stateless
+- Session
+- Session ID
+
+پروتکل HTTP ذاتا Stateless است؛ یعنی HTTP به صورت خودکار وضعیت Request های قبلی را نگه نمی‌دارد. کوکی می‌تواند یک شناسه را بین Request های مختلف حمل کند تا Server بتواند آن Request ها را به یک Session مرتبط کند.
+
+مفهوم Stateless یعنی HTTP به طور ذاتی وضعیت Request های قبلی را نگه نمی‌دارد.
+مفهوم Session یعنی ایجاد یک وضعیت مشترک بین چند Request برای مرتبط کردن آن‌ها با یکدیگر.
+
+معمولا اطلاعات اصلی Session در Server نگهداری می‌شود و کوکی فقط یک Identifier دارد:
+
+code:text
+session_id=ABC123
+codeE
+
+اگر یک Session Cookie معتبر در اختیار مهاجم قرار بگیرد، مهاجم ممکن است بتواند از همان Session استفاده کند. به این حالت Session Hijacking گفته می‌شود.
+
+code:text
+Session Cookie دزدیده شد
+↓
+استفاده توسط مهاجم
+↓
+Session Hijacking
+codeE
+
+ایجاد Cookie
+
+- Set-Cookie
+- Response Header
+
+پس از دریافت Request، Server می‌تواند با استفاده از Set-Cookie یک یا چند کوکی برای Browser تنظیم کند.
+
+code:text
+HTTP/1.1 200 OK
+Content-Type: text/html
+Set-Cookie: yummy_cookie=chocolate
+Set-Cookie: tasty_cookie=strawberry
+
+[page content]
+codeE
+
+در Request های بعدی، Browser کوکی‌های مناسب را با Header به نام Cookie ارسال می‌کند:
+
+code:text
+GET /sample_page.html HTTP/1.1
+Host: www.example.org
+Cookie: yummy_cookie=chocolate; tasty_cookie=strawberry
+codeE
+
+پس:
+
+Set-Cookie → Response → Server → Browser
+Cookie → Request → Browser → Server
+
+Cookie Lifetime
+
+- Expires
+- Max-Age
+- Session Cookie
+
+ویژگی Expires زمان انقضای کوکی را به صورت تاریخ و ساعت مشخص می‌کند.
+
+ویژگی Max-Age مدت اعتبار کوکی را بر اساس ثانیه مشخص می‌کند. اگر هر دو وجود داشته باشند، Max-Age اولویت دارد.
+
+اگر Expires و Max-Age تعیین نشوند، کوکی معمولا Session Cookie محسوب می‌شود و پایان عمر آن به پایان Session مرورگر وابسته است. بعضی Browser ها می‌توانند Session قبلی را Restore کنند، بنابراین Session Cookie در بعضی شرایط ممکن است مدت بسیار طولانی باقی بماند.
+
+Update و Remove Cookie
+
+- Set-Cookie
+- Max-Age=0
+- Domain
+- Path
+
+برای تغییر مقدار یک کوکی، Server می‌تواند دوباره Set-Cookie را با همان Name و مقدار جدید ارسال کند.
+
+code:text
+Set-Cookie: id=new-value
+codeE
+
+برای حذف کوکی می‌توان مقدار Max-Age را صفر کرد:
+
+code:text
+Set-Cookie: session_id=ABC123; Max-Age=0
+codeE
+
+برای حذف صحیح کوکی باید Scope آن نیز در نظر گرفته شود. اگر کوکی با Domain یا Path خاصی ایجاد شده باشد، هنگام حذف باید همان Scope موردنظر تنظیم شود.
+
+code:text
+Set-Cookie: session_id=ABC123; Max-Age=0; Domain=example.com; Path=/
+codeE
+
+نکته مهم این است که حذف کوکی از Browser به تنهایی به معنی پایان Session نیست. در Logout بهتر است Server-side Session نیز Invalidate شود تا Session ID قبلی دیگر قابل استفاده نباشد.
+
+JavaScript و Cookie
+
+- document.cookie
+- Read
+- Update
+
+در Browser، JavaScript می‌تواند در شرایط مجاز با استفاده از document.cookie به Cookie های قابل دسترس دسترسی داشته باشد و مقدار بعضی از آن‌ها را تغییر دهد.
+
+مثلا:
+
+code:text
+document.cookie = "yummy_cookie=blueberry";
+codeE
+
+HttpOnly و Secure
+
+- HttpOnly
+- Secure
+
+ویژگی HttpOnly باعث می‌شود JavaScript نتواند کوکی را از طریق document.cookie بخواند. این ویژگی مخصوصا برای Session Cookie مهم است، چون در شرایطی مانند XSS می‌تواند احتمال دسترسی JavaScript به Session ID را کاهش دهد. Browser همچنان می‌تواند کوکی را در Request مناسب برای Server ارسال کند.
+
+code:text
+Set-Cookie: session_id=ABC123; HttpOnly
+codeE
+
+ویژگی Secure باعث می‌شود کوکی فقط از طریق HTTPS ارسال شود.
+
+code:text
+Set-Cookie: session_id=ABC123; Secure
+codeE
+
+برای کوکی‌های حساس معمولا ترکیب Secure و HttpOnly در نظر گرفته می‌شود.
+
+Opaque Identifier
+
+- Server-side Session
+- Opaque Identifier
+- Sensitive Data
+
+بهتر است اطلاعات حساس مستقیما داخل کوکی قرار نگیرد. می‌توان یک Opaque Identifier داخل کوکی قرار داد و اطلاعات واقعی را در Server نگهداری کرد.
+
+code:text
+Cookie:
+session_id=ABC123
+
+Server:
+ABC123 → User + Session Data
+codeE
+
+در این روش کوکی فقط نقش Identifier را دارد و اطلاعات اصلی در Server نگهداری می‌شود.
+
+Session Fixation
+
+- Known Session ID
+- Authentication
+- Session Regeneration
+
+در حمله Session Fixation، مهاجم ابتدا یک Session عادی از Server می‌گیرد و Session ID آن را می‌داند.
+
+code:text
+Server
+↓
+session_id=ABC123
+↓
+Attacker knows ABC123
+codeE
+
+سپس مهاجم تلاش می‌کند Browser قربانی نیز از همین Session ID استفاده کند. اگر قربانی با همان Session Login کند و Server بعد از Authentication، Session ID را تغییر ندهد، همان Session ممکن است به حساب قربانی متصل شود.
+
+code:text
+Session ID شناخته‌شده
+↓
+Victim Login
+↓
+Session همان ABC123 باقی می‌ماند
+↓
+Session Authentication می‌شود
+↓
+Attacker Session ID را می‌داند
+codeE
+
+اصل مهم این است که Server باید بعد از Authentication، Session ID را Regenerate کند و Session قبلی را به شکل مناسب مدیریت کند.
+
+Path و Domain
+
+- Domain
+- Path
+- Host-only Cookie
+
+اگر Domain مشخص نشود، Browser به طور معمول کوکی را به همان Hostی که آن را تنظیم کرده محدود می‌کند. اگر Domain مشخص شود، کوکی می‌تواند برای آن Domain و Subdomain های مناسب ارسال شود.
+
+ویژگی Path مشخص می‌کند کوکی در Request های مربوط به چه مسیرهایی ارسال شود. اما Path یک مکانیزم امنیتی برای جلوگیری از خواندن کوکی نیست.
+
+code:text
+Set-Cookie: session_id=ABC123; Domain=example.com; Path=/
+codeE
+
+Zombie Cookie
+
+- Recreated Identifier
+- Tracking
+- Privacy
+
+Zombie Cookie به حالتی گفته می‌شود که سایت بعد از حذف کوکی، Identifier مربوط به کاربر را از محل دیگری بازیابی کرده و دوباره کوکی را ایجاد کند.
+
+code:text
+Cookie ایجاد می‌شود
+↓
+کاربر Cookie را حذف می‌کند
+↓
+Identifier از محل دیگری بازیابی می‌شود
+↓
+Cookie دوباره ساخته می‌شود
+↓
+کاربر دوباره شناسایی می‌شود
+codeE
+
+هدف اصلی Zombie Cookie معمولا حفظ شناسایی یا Tracking کاربر است.
+
+Token چیست؟
+
+- Authentication
+- Token
+- Client
+
+توکن یک مقدار است که Client بعد از Authentication دریافت می‌کند و در Request های بعدی برای اثبات هویت یا دسترسی خود استفاده می‌کند.
+
+یکی از Token های معروف JWT است.
+
+JSON Web Token
+
+- JWT
+- Header
+- Payload
+- Signature
+
+ساختار کلی:
+
+code:text
+HEADER.PAYLOAD.SIGNATURE
+codeE
+
+مثال:
+
+code:text
+xxxxx.yyyyy.zzzzz
+codeE
+
+پس Payload می‌تواند شامل Claim هایی مانند موارد زیر باشد:
+
+code:text
+{
+"sub": "12345",
+"username": "mahdi",
+"role": "user",
+"exp": 1790000000
+}
+codeE
+
+نکته مهم این است که JWT معمولا برای Confidentiality رمزنگاری نشده است و Payload آن قابل Decode است. Signature برای بررسی Integrity و تشخیص تغییر Token استفاده می‌شود.
+
+JWT می‌تواند در Cookie یا در مکانیسم دیگری مانند Header استفاده شود.
+
+Server-to-Server
+
+- Server as Client
+- HTTP Client
+- API
+
+در بعضی معماری‌ها خود Server نیز می‌تواند نقش Client را داشته باشد. اگر Server A به Server B یک HTTP Request ارسال کند، این ارتباط Server-to-Server است.
+
+code:text
+Server A
+↓
+HTTP Request
+↓
+Server B
+↓
+HTTP Response
+codeE
+
+در این حالت CORS به عنوان محدودیت Browser مطرح نیست. Server B همچنان می‌تواند Authentication، API Key، Firewall، IP Allowlist و کنترل‌های دیگر را اعمال کند.
+
+Origin چیست؟
+
+- Scheme
+- Host
+- Port
+- Same-Origin
+- Cross-Origin
+
+Origin از سه بخش ساخته می‌شود:
+
+code:text
+Scheme + Host + Port
+codeE
+
+برای مثال:
+
+code:text
+https://example.com:443
+
+Scheme = https
+Host = example.com
+Port = 443
+codeE
+
+اگر Scheme، Host و Port دو URL یکسان باشند، آن دو URL Same-Origin هستند. اگر هرکدام متفاوت باشد، Cross-Origin محسوب می‌شوند.
+
+Cross-Site
+
+- Site
+- Cross-Site
+- SameSite
+
+مفهوم Cross-Site به تعامل بین Site های متفاوت اشاره می‌کند و در موضوعاتی مانند Cross-Site Scripting، Cross-Site Request Forgery، Cross-Site Tracking و SameSite Cookie دیده می‌شود.
+
+نکته این است که Cross-Site و Cross-Origin دقیقا یکی نیستند. Origin بر اساس Scheme + Host + Port تعریف می‌شود، در حالی که مفهوم Site در SameSite از تعریف دیگری استفاده می‌کند.
+
+CORS چیست ؟
+
+- Cross-Origin Resource Sharing
+- Same-Origin Policy
+- Browser
+
+مفهوم CORS مربوط به کنترل دسترسی Cross-Origin در Browser است. Browser به صورت پیش‌فرض دسترسی Script ها به Resource های Origin دیگر را محدود می‌کند و Server می‌تواند با Header هایی مانند Access-Control-Allow-Origin مشخص کند چه Origin هایی مجاز هستند.
+
+code:text
+Browser
+↓
+Cross-Origin Request
+↓
+Server
+↓
+Access-Control-Allow-Origin
+codeE
+
+نکته مهم این است که CORS جلوی همه Cross-Origin Request ها را نمی‌گیرد؛ بلکه نقش اصلی آن کنترل دسترسی Browser به Response و اجرای سیاست‌های مربوط به دسترسی Script ها است.
+
+SameSite Cookie
+
+- Strict
+- Lax
+- None
+
+ویژگی SameSite مشخص می‌کند کوکی در چه شرایطی همراه Cross-Site Request ارسال شود.
+
+SameSite=Strict
+
+در این حالت کوکی در Cross-Site Context ارسال نمی‌شود.
+
+SameSite=Lax
+
+در این حالت در بیشتر Cross-Site Request ها کوکی ارسال نمی‌شود، اما بعضی Top-Level Navigation ها مانند رفتن با یک لینک به سایت مقصد می‌توانند اجازه ارسال کوکی را داشته باشند.
+
+SameSite=None
+
+در این حالت کوکی می‌تواند در Cross-Site Context نیز ارسال شود و برای این حالت Secure نیز لازم است.
+
+در Browser های مدرن، رفتار Lax در بسیاری از شرایط به عنوان Default دیده می‌شود، اما برای رفتار مشخص بهتر است مقدار SameSite صراحتا تنظیم شود.
+
+Same-Origin و Cross-Origin
+
+برای مقایسه، دو Request زیر را در نظر بگیر:
+
+code:text
+POST /transfer HTTP/1.1
+Host: bank.example
+Origin: https://bank.example
+Cookie: session_id=ABC789
+Content-Type: application/x-www-form-urlencoded
+
+amount=100&to=ALI123
+
+POST /transfer HTTP/1.1
+Host: bank.example
+Origin: https://evil.example
+Content-Type: application/x-www-form-urlencoded
+
+amount=100&to=ATTACKER999
+codeE
+
+در Request دوم Cross-Origin است. ارسال یا عدم ارسال Cookie در چنین شرایطی به تنظیمات Cookie مانند SameSite و همچنین سایر شرایط Browser بستگی دارد.
+
+همچنین CORS به تنهایی جلوی ارسال همه Request ها را نمی‌گیرد و نقش اصلی آن کنترل دسترسی Browser به Response است.
+
+Cookie Prefix
+
+- __Secure-
+- __Host-
+- __Http-
+- __Host-Http-
+
+مفهوم Cookie Prefix ها یک لایه دفاعی در Browser هستند و روی نحوه تنظیم بعضی کوکی‌ها محدودیت ایجاد می‌کنند.Prefix __Secure- باعث می‌شود Cookie باید Secure داشته باشد و از یک Secure Context ایجاد شود.
+
+code:text
+Set-Cookie: __Secure-session=ABC123; Secure
+codeE
+
+درواقع Prefix __Host- محدودیت بیشتری دارد. در این حالت Cookie باید Secure داشته باشد، از HTTPS ایجاد شود، Domain نداشته باشد و Path=/ داشته باشد.
+
+code:text
+Set-Cookie: __Host-session=ABC123; Secure; Path=/
+codeE
+
+مهم‌ترین تفاوت __Host- با __Secure- این است که __Host- اجازه Domain را نمی‌دهد و در نتیجه Cookie به همان Host محدود می‌شود.
+
+Prefix __Http- نیازمند Secure و HttpOnly است.
+
+code:text
+Set-Cookie: __Http-session=ABC123; Secure; HttpOnly
+codeE
+
+Prefix __Host-Http- محدودیت‌های __Host- و __Http- را با هم ترکیب می‌کند.
+
+code:text
+Set-Cookie: __Host-Http-session=ABC123; Secure; HttpOnly; Path=/
+codeE
+
+درواقع Prefix بخشی از نام واقعی Cookie است و Browser آن را حذف نمی‌کند.
+
+code:text
+Cookie Name:
+__Host-session
+
+Cookie Value:
+ABC123
+
+Request:
+Cookie: __Host-session=ABC123
+codeE
+
+بنابراین Server باید کل نام Cookie را بررسی کند. Prefix فقط یک علامت داخلی برای Browser نیست و جزئی از نام Cookie محسوب می‌شود.
+
+Cookie Domain و Session Fixation
+
+- Subdomain
+- Domain Scope
+- Cookie Fixation
+
+در بعضی سناریوهای Session Fixation، اگر مهاجم بتواند یک Subdomain را کنترل کند، ممکن است تلاش کند Cookieای برای Domain بالاتر تنظیم کند.
+
+code:text
+Set-Cookie: session_id=ATTACKER123; Domain=bank.example
+codeE
+
+اگر Browser این Cookie را قبول کند و Application فقط به Name آن توجه کند، ممکن است Browser قربانی از همان Session ID استفاده کند.
+
+به همین دلیل __Host- برای بعضی سناریوها اهمیت دارد، چون اجازه Domain نمی‌دهد و Cookie را به همان Host محدود می‌کند.
+
+Third-Party Cookie
+
+- First-Party Cookie
+- Third-Party Cookie
+- Tracking
+
+کوکی‌ای که در Context یک Site دیگر توسط یک Third Party تنظیم یا استفاده می‌شود، می‌تواند Third-Party Cookie محسوب شود.
+
+درواقع Third-Party Cookie ها می‌توانند کاربردهای مختلفی مانند بعضی سرویس‌های Embedded، Login و Analytics داشته باشند، اما می‌توانند برای Tracking فعالیت کاربر در چند Site نیز استفاده شوند.
+
+Tracking می‌تواند با استفاده از یک Identifier انجام شود:
+
+code:text
+tracking_id=ABC123
+codeE
+
+در این حالت Third Party می‌تواند Request های مرتبط با همان Identifier را در Context های مختلف به هم مرتبط کند.
+
+بسیاری از Browser ها امروزه Third-Party Cookie ها را محدود یا مسدود می‌کنند و رفتار دقیق بین Browser ها متفاوت است.
+
+جمع‌بندی
+
+- HTTP → Stateless
+- Cookie → Client-side State Carrier
+- Session → Server-side State
+- Token → Authentication Data
+- SameSite → Cross-Site Cookie Control
+- HttpOnly → محدود کردن JavaScript
+- Secure → HTTPS
+- Domain / Path → Cookie Scope
+- Prefix → Cookie Configuration Defense
+
+code:text
+HTTP
+↓
+Stateless
+↓
+Cookie / Token
+↓
+Session / Authentication
+↓
+Browser ↔ Server
+codeE
+==============================================================================================================================================================================
+سه نوع کلاینت داریم
+
+- Browser
+- Mobile Application
+- Script
+
+اول : از طریق Browser آدرس درحال Request زدن هستیم
+دوم : از طریق یک Application موبایل با کلیک برروی Button ها Request ارسال می‌شود
+سوم : یک Script اجرا می‌کنیم و Request ها را ارسال می‌کند
+به هر شکلی که باشد با URL در قدم اول کار داریم
+
+ساختار URL
+
+- Scheme
+- Subdomain
+- Domain
+- Path
+- Query
+- Fragment
+
+code:text
+https://
+Scheme
+codeE
+
+بخش اول هر URL می‌شود Protocol یا Scheme مثل:
+
+code:text
+http
+https
+websocket
+file
+ws
+wss
+codeE
+
+این‌ها Protocol هایی هستند که مرورگرها می‌فهمند
+قبلا FTP را هم می‌فهمیدند
+
+code:text
+[www]
+Subdomain
+codeE
+
+می‌تواند باشد می‌تواند نباشد
+
+code:text
+wation.net
+Domain
+codeE
+
+Domain از دو بخش تشکیل شده:
+
+code:text
+wation.net
+SLD TLD
+codeE
+
+TLD = Top Level Domain
+SLD = Secondary Level Domain
+سمت راست TLD است
+سمت چپ SLD است
+نکته : حتی می‌توان مالک یک TLD بود
+
+link
+https://archive.org
+linkE
+
+code:text
+/auth/login
+Path
+codeE
+
+به این بخش Route یا Path می‌گویند
+
+code:text
+?type=mobile
+Query
+codeE
+
+در واقع Query String آنچه بعد از علامت سؤال است که شامل یک سری Key و Value می‌باشد
+
+code:text
+#form
+Fragment
+codeE
+
+بخش بعدی URL، Fragment نام دارد؛ آنچه بعد از Sharp است
+نکته : مقادیر سمت Backend ارسال نمی‌شوند و آسیب‌پذیری‌های آن Client-Side است
+
+DNS Resolution
+
+- DNS
+- Domain
+- IP Address
+- Name Server
+- Recursive Resolver
+
+اولین سوالی که مرورگر می‌پرسد این است که من این Request را باید تحویل کی بدهم ؟
+درواقع هدف از ثبت Domain این است که نام Domain شما به واسطه DNS تبدیل به یک IP شود
+
+محل DNS:
+
+code:text
+Browser Cache
+OS Cache / Hosts File
+/etc/hosts
+C:\Windows\System32\drivers\etc\hosts
+codeE
+
+اولین کاری که Browser با دیدن Request انجام می‌دهد این است که می‌رود Cache را بررسی می‌کند اگر برای آن Domain Cache وجود نداشته باشد از سیستم‌عامل می‌پرسد که با توجه به نوع سیستم‌عامل مسیر متفاوتی دارد اما آن File بررسی می‌شود اگر نباشد می‌رود سراغ Recursive Resolver و از آن می‌پرسد می‌تواند در Network شما باشد می‌تواند در Internet باشد که آن Server هم می‌رود سراغ Cache خودش اگر نداشته باشد می‌رود فرآیند Resolve که می‌رود سراغ Root Name Server ها که ۱۳ تا هستند که می‌شود مثلا NASA و وزارت جنگ و ... اگر این‌ها نخواهند هیچ Domain مربوط به .ir قابل آدرس نخواهد بود گرچه در سطح جهان هر کدام از این Address ها به تعداد زیادی آدرس IP Resolve می‌شوند
+
+درواقع اگر این آدرس را بپرسیم:
+
+code:text
+wation.ir
+codeE
+
+درواقع می‌پرسیم Name Server های ir کجاست
+
+در قدم بعدی از Name Server می‌پرسد که wation.ir کجاست درواقع دنبال SLD هستیم
+وقتی یک Domain ثبت می‌کنیم می‌توان Name Server ثبت کنیم
+درخواست‌ها به این‌ها می‌آید و باید به سمت من بیاید
+بعد Name Server آدرس آن Hosting شما را می‌دهد و Request می‌رود سمت Hosting
+حالا کل آدرس شما بررسی می‌شود در DNS Server هاستینگ هم پاسخ داده می‌شود و IP را می‌دهد و در Browser شما Cache می‌شود
+تا اینجا Protocol DNS بود از الان HTTP
+
+HTTP Connection
+
+- IP Address
+- Port
+- Web Server
+- Listen
+
+مقصد آن IP است که DNS داده 
+همچنین Port به صورت پیش‌فرض براساس Protocol توسط Browser انتخاب می‌شود مگر Custom Port
+زمانی که HTTP Request می‌زنید یک Web Server دارد روی این Port Listen می‌کند
+
+انواع Web Server
+
+- IIS
+- Nginx
+- Apache
+- LiteSpeed
+- GWS
+
+Windows → IIS
+Linux → Nginx + Apache + LiteSpeed
+Google → GWS
+
+در نهایت این Request شما می‌رسد دست Web Server و باید دست به دست کند و بدهد به Web Application
+
+CDN و Reverse Proxy
+
+- CDN
+- Reverse Proxy
+- Upstream
+- SSL
+- Private Key
+
+حالا ممکن است یک ماهیت دیگر این وسط باشد به اسم CDN
+به جای اینکه IP اصلی Server را ببینید IP CDN را می‌بینید Packet را می‌گیرد حتی اگر SSL بود باز می‌کند و دوباره Encrypt می‌کند و می‌فرستد برای Web Server به عنوان Upstream
+پس شما باید Private Key را در اختیارش قرار بدهید که بتواند بازش کند
+پس ممکن است IP اصلی Server را نبینید که به آن‌ها Reverse Proxy هم می‌گویند
+
+Forward Proxy و Reverse Proxy
+
+- Forward Proxy
+- Reverse Proxy
+
+اما Forward Proxy زمانی است که Request می‌فرستد سمت Internet
+تفاوت را بخوان
+گاهی اوقات به دلیل وجود Reverse Proxy نمی‌توانید یک آسیب‌پذیری انجام بدهید مثل Host Header Injection چون نمی‌توانید با Host اصلی صحبت کنید
+
+Web Application
+
+- CMS
+- WordPress
+- Drupal
+- Developer
+- Sysadmin
+- DevOps Engineer
+
+جنس Web Application مهم است چون ماهیت آن را مشخص می‌کند
+ممکن است یک CMS باشد:
+
+code:text
+WordPress
+Drupal
+codeE
+
+کشف آسیب‌پذیری وظیفه ما نیست وظیفه Security Researcher می‌باشد
+شما می‌روید می‌بینید چه آسیب‌پذیری‌های شناخته‌شده‌ای دارد Web Server و Version
+قدم دوم می‌روید می‌بینید چه Default Configuration هایی روی Web Server هست که می‌تواند نگران‌کننده باشد
+
+code:text
+default configuration apache page
+codeE
+
+code:text
+/upload
+codeE
+
+گاهی هم Default نیست Misconfiguration می‌باشد
+بعدش Request ما می‌رسد دست Web Application
+درواقع Developer Web App می‌نویسد
+درواقع ما از اشتباهات Developer و Sysadmin و DevOps Engineer استفاده می‌کنیم
+
+Application Stack
+
+- Web Application
+- Database
+- Relational Database
+- NoSQL
+- In-Memory Database
+
+Application Stack چیست ؟
+پشت هر Web App یک Database می‌باشد
+ممکن است Relational باشد:
+
+code:text
+MySQL
+MSSQL
+MariaDB
+codeE
+
+ممکن است NoSQL باشد:
+
+code:text
+Elasticsearch
+Redis
+MongoDB
+codeE
+
+In-Memory Database
+
+HTTP Message
+
+- Request
+- Response
+- Header
+- Body
+
+اصلی‌ترین موضوعی که باید بدانیم Protocol HTTP می‌باشد چی می‌فرستیم و چی می‌گیریم
+زیر مجموعه چتر HTTP:
+
+Request
+Response
+
+از دو بخش تشکیل می‌شوند:
+
+Header
+Body
+
+ممکن است Body نداشته باشد
+
+Burp Suite
+
+Burp Suite نقش یک Proxy را بازی می‌کند
+
+code:text
+Browser
+↓
+Burp Suite
+↓
+Web Server
+codeE
+
+Carriage Return و Line Feed
+
+- Carriage Return
+- Line Feed
+- CRLF
+
+Carriage Return
+
+code:text
+\r
+codeE
+
+Line Feed
+
+code:text
+\n
+codeE
+
+این نشان‌دهنده تفکیک Header و Body است
+
+Header Request
+
+- Request-Line
+- Key / Value
+- 400 Bad Request
+
+اگر ساختار درست را رعایت نکنی جواب 400 Bad Request می‌گیری
+این Standard چیست ؟
+خط اول با بقیه خطوط فرق دارد
+بقیه خطوط Key و Value دارند
+
+code:text
+key : value
+codeE
+
+خط اول متد را مشخص می‌کند
+
+GET متد
+
+- GET
+- URL
+- Request Body
+
+اولین درخواستی که به هر Server ارسال می‌شود متد GET می‌باشد
+متد GET Request Body ندارد هرچی هست همان URL می‌باشد
+متد GET سقف تعداد Character دارد سقف نهایت 8000 Byte است و به نسبت Web Server می‌تواند متفاوت باشد
+پس با متد GET متد خوبی برای Upload File نیست
+
+POST متد
+
+- POST
+- Request Body
+- Logging
+- Privacy
+
+چرا متد POST را Log نمی‌کنند ؟
+بحث حجم و حریم خصوصی و ... هست
+پس خطر می‌تواند این باشد که File های حساس با متد POST صدا زده بشوند
+متد POST می‌تواند حجم زیادی را دریافت کند مثلا 32 MB بستگی به Web Server دارد
+
+RESTful API
+
+- GET
+- POST
+- PUT
+- PATCH
+- DELETE
+
+درواقع RESTful API مثلا به برنامه‌نویس می‌گوید با متد GET و POST محصولی را Delete نکن با متد DELETE این کار را بکن
+متد DELETE زمانی که می‌خواهی چیزی حذف کنی از این استفاده کن
+اگر می‌خواهی محصولی به وجود بیاوری با POST انجام بده اگر می‌خواهی ویرایش کنی با PUT انجام بده و متد PATCH
+اگر می‌خواهی مقداری را ویرایش کنی که فقط بخشی از آن Product می‌باشد از این مقدار استفاده کن
+
+WebDAV
+
+- PUT
+- PATCH
+- DELETE
+- File Upload
+- File Edit
+- File Delete
+- Authentication
+
+یک افسانه هست که می‌گوید این سه تا متد متدهای خطرناک می‌باشند
+یک Extension هست به نام WebDAV اگر روی Web Server فعال کنیم Web Server نقش File Manager بازی خواهد کرد
+با متد PUT می‌شود File Upload کرد
+با متد PATCH می‌توان File را ویرایش کرد و با DELETE می‌توان حذف کرد
+وجود WebDAV مشکلی ندارد مشکل بدون Authentication بودن آن است
+
+Browser Security
+
+- Same Origin Policy
+- Method
+- Browser
+
+Browser یک سری خاصیت امنیتی دارد
+Same Origin Policy
+با هر متد یک جور برخورد می‌کند این برخورد کردن ایمنی به همراه می‌آورد
+
+HEAD متد
+
+- HEAD
+- GET
+- Response Body
+- Metadata
+
+متد HEAD همان GET است با این تفاوت که درواقع به Server مقصد می‌گوییم Body Response را نده
+مثلا ADM یا IDM اگر GET بزند که کل File را دریافت می‌کند اول یک متد HEAD می‌زند که بتواند Chunk ها را مشخص کند و ...
+
+Same Origin
+
+- Scheme
+- Hostname
+- Port
+- Same Origin
+- Cross-Origin
+
+چه دو تا URL هایی Same Origin هستند ؟
+Protocol و Hostname و Port یکی باشند
+
+CORS
+
+- Cross-Origin Resource Sharing
+- Origin
+- OPTIONS
+- Access-Control-Allow-Origin
+- Simple Request
+
+Cross-Origin Resource Sharing Misconfiguration
+در Header ای به نام Origin می‌پرسد تو مجاز می‌دانی این Site بهت Request بزند ؟
+اگر در Response بدهد Access-Control-Allow-Origin یعنی اجازه دارد
+زمانی که یک سایتی به Site دیگری که Same Origin نیست درخواست بزند Browser می‌پرسد آیا این Site حق دارد بهت Request بزند یا نه با متد OPTIONS
+
+Simple Request
+
+and ...
+
+CONNECT متد
+
+- CONNECT
+- Proxy
+- Reverse Proxy
+
+فعال بودن متد CONNECT به هر شکل آسیب‌پذیری به همراه دارد
+این متد اگر فعال باشد می‌شود Reverse Proxy کرد Server را
+چگونه می‌توان استفاده کرد ؟
+
+ProxyChains
+
+- Linux Tools
+- Proxy
+- Configuration File
+
+Linux Tools : ProxyChains
+یک File Configuration دارد
+از آن Site پروکسی‌ها را می‌گذاریم داخل این و هر Commandی خواستیم بزنیم قبلش می‌نویسیم:
+
+code:text
+ProxyChains
+codeE
+
+در انتهای این File قرار می‌دهیم
+این بخش را از AI بپرس می‌شود Random هم کرد یکی از این برود یکی از آن
+
+WebRTC
+
+- WebRTC
+- IP Address
+
+WebRTC چیست ؟
+اگر فعال باشد IP لو می‌رود
+
+Reverse Web Server
+
+- Request
+- Header
+
+یک سری وقت‌ها Reverse Web Server ها یک سری چیزها به Request شما اضافه می‌کنند
+
+TRACE متد
+
+- TRACE
+- Data Leakage
+
+متد TRACE باید غیرفعال باشد چون باعث نشت Data می‌شود
+
+Routing
+
+- Internal Route
+- External Route
+- Cloudflare
+- Starlink
+- IP Address
+
+سایت ایرانسل بین درخواست‌هایی که ارسال می‌کند یک Request ارسال می‌کند به سمت Cloudflare
+چرا باید این مجموعه این Request ها را ارسال بکند ؟
+این می‌شود که Starlink ها لو می‌رود؟
+شما Route نوشتی Site داخلی با IP داخلی بره خارجی با Starlink
+سایت من که ایرانیه تو با IP داخلی Request می‌زنی
+سایت خارجی که ایرانی نیست پس Traffic شما از آن یکی Route شما رد می‌شود و بهش برمی‌گردونه
+این آن IP نیست که خودش دارد
+حالا هر دو IP دارد شماره‌ات هم که دارد و ...
+==============================================================================================================================
+تکامل HTTP
+
+- HTTP/0.9
+- HTTP/1.0
+- HTTP/1.1
+
+درواقع پروتکل HTTP با ورژن 0.9 کارش را شروع کرد و فقط متد GET داشت، هیچ هدر وجود نداشت و صرفا می‌شد HTML دریافت کرد.
+
+در سال 1996 نسخه یک منتشر می‌شود که متدهای POST و HEAD اضافه می‌شوند و بحث Content-Type هم اضافه شد. بحث HTTP Version و Status Code و Header ها اضافه شد و ماهیت ارتباطی تا نسخه یک به این شکل بود که Connection TCP برقرار می‌شد سپس یک درخواست می‌زدی و Connection قطع می‌شد.
+
+در نسخه 1.1 یک هدر به نام Host اضافه شد.
+
+Host Header
+
+- Host
+- Virtual Host
+- Multiple Sites
+
+چجوری یک وب‌سرور روی یک Port مثلا 443 چندین سایت را میزبانی کند؟
+
+درواقع با فیلدی به نام Host Header که از ورژن 1.1 اضافه شد و از آنجا می‌توانستی در یک Port چندین سایت را میزبانی کنی.
+
+شما می‌زنی:
+
+code:text
+wation.net/
+codeE
+
+می‌رود نگاه می‌کند Host چیست سپس می‌رود فایل Virtual Host را نگاه می‌کند که ببیند Wation داخلش هست یا نه. اگر بود آن Document Root را نگاه می‌کند و محتواش را بهت نشان می‌دهد و اگر نداشته باشد بهت 404 برمی‌گرداند. حتی اگر یه Error این وسط باشد بازم معیار همین Hostname است.
+
+User-Agent
+
+- User-Agent
+- Browser
+- Mozilla/5.0
+
+در درخواست یک سری هدر دیگر وجود دارد و یکی از آن‌ها User-Agent است که قابل دستکاری نیز هست.
+
+درواقع همه User-Agent ها با Mozilla 5 شروع می‌شوند و همه اون‌هایی که مرورگر استفاده می‌کند همین حالت را دارند. دلیلش اینه که اولین مرورگری که به وجود آمد World Wide Web Browser بود که Agent خودش را داشت سپس Netscape آمد که برای Mozilla بود و JavaScript را می‌فهمید. زمانی که Browser می‌فهمید که JavaScript را می‌فهمه، JavaScript هم براشون سرو می‌کردن.
+
+بعد از Netscape مرورگرهای دیگری به وجود آمدند و می‌خواستند بگن ما هم JavaScript می‌فهمیم، برای همین جعل کردن این User-Agent رو.
+
+درواقع اگر اولش با Mozilla 5 بود یعنی از مرورگر اومده.
+
+Referer Header
+
+- Referer
+- Source
+- Request Header
+
+یک هدر دیگری در درخواست‌ها وجود دارد به نام Referer که یعنی از کجا اومدی به این سایت.
+
+اگر یه آیتم در یک سایت کلیک کنی و به سایت دیگه بری یک آیتم به درخواستت اضافه می‌شود که از کجا اومدی.
+
+گاهی اوقات این دو هدر در Database ذخیره می‌شوند و پس احتمال داره اون سایت SQL Injection بخوره.
+
+Cookie و Session
+
+- Cookie
+- Session
+- Authentication
+- Monitoring
+- Security
+
+سایت‌ها به دلایل متعددی بهت کوکی میدن، مثلا Login کردی و برای اینکه Logout نشی بهت کوکی میده که میشه Session.
+
+code:text
+session = hjhiuwufui789343hjhjsdfhsfh
+codeE
+
+هر بار سایت رو باز می‌کنی این مقدار به سایت ارسال می‌شود. به کوکی که منجر به Authentication شما میشه و معادلش سمت Server یا در Database یا در سمت کاربر در قالب File بهش میگن Session.
+
+کوکی میتونه برای مباحث مانیتورینگ و امنیت هم استفاده بشه.
+
+JavaScript و Redirect
+
+- JavaScript
+- Redirect
+- 302
+- Selenium
+
+سایت‌ها برای اینکه Request زیاد بهم نزنن اول یه کد JavaScript میفرستن سمت مرورگر شما و مرورگر جواب میده بهشون سپس Redirect میشیم به سمت سایت اصلی و عموما هم 302 هست Status Code.
+
+اگر میخوای درخواست بزنی و JavaScript هم حل کنی با اسکریپت باید از Selenium استفاده کنی.
+
+Cookie Storage
+
+- Application
+- Storage
+- Cookies
+- Domain
+- Path
+- Max-Age
+
+برای مشاهده کوکی در مرورگر:
+
+code:text
+F12 → Application → Storage → Cookies → Domain
+codeE
+
+حتی ممکنه فایروال بهت کوکی بده یا ممکنه سایت‌ها به دلیل آماری کوکی بدهند.
+
+هر کوکی از چند بخش تشکیل شده. اول اسمش که اسمیه که برنامه‌نویس گذاشته و شاید بخونی خوانا باشه یا شاید نباشه. یه مقداری داره که اون مقدار شاید خوانا باشه و شایدم نباشه و ممکنه Encoding باشه.
+
+پس کوکی یک Key و Value و Other Column دارد. یک فیلد داره به نام Path و یه فیلد دیگه داره به نام Max-Age و فیلد بعدی فیلد Domain می‌باشد.
+
+شاید اگر منقضی هم بشه بازم قابل استفاده باشد. این Session اشاره به زمان انقضای کوکی داره که زمانی که مرورگر رو بستی تا اون زمان Login هست.
+
+اگر قبل Domain دات داشته باشه یعنی به همه Subdomain ها هم قابل استفاده است.
+
+HttpOnly
+
+- HttpOnly
+- JavaScript
+- Cookie Access
+
+این Flag درواقع اگر True باشه یا فعال باشه JS به کوکی دسترسی ندارد.
+
+Extension هایی رو مرورگر هست و ... اینا کد JavaScript هستن. اینا میتونن بیان کد اجرا کنن در اون محیط. اگر یه کوکی حساسی باشه Flag True نباشه تمام این Extension ها میتونن کوکی رو بدزدن.
+
+پس کوکی های حساس باید Flag True باشه. قرار هم نیست رو هم True باشه و باید رو بعضی موارد JS فعال باشه.
+
+Secure
+
+- Secure
+- HTTPS
+
+فلگ بعدی فلگ Secure است. اگر فلگ Secure فعال باشد کوکی مورد نظر تنها در حالت HTTPS ارسال میشود.
+
+پس کوکی حساس این فلگش هم True باشد.
+
+Front-End و Back-End
+
+- Front-End
+- Back-End
+- Source Code
+- Obfuscation
+- Minification
+- White Box
+
+هر سایت تشکیل شده از دو بخش. فرانت آنچه که سورس رو میبینیم. ممکنه Obfuscate کرده باشه یا Minify کرده باشه ولی بالاخره تو میبینی.
+
+اکثر موارد مهم تو بک‌اند که شما نمی‌تونی سورس رو ببینی مگر اینکه White Box پن‌تست کنی و شما به نتیجه اجرای اون سورس دسترسی داری.
+
+وب اپلیکیشن پن‌تست
+
+- OWASP
+- WSTG
+- Web Security Testing Guide
+
+OWASP یک سازمان غیرتجاری است که برروی آسیب پذیری های وب اپلیکیشن موبایل LLM ها و ... تحقیق میکند و شیوه تست و ایمن سازی آن ها را ارائه میدهد.
+
+WSTG
+
+Web Security Testing Guide
+
+نسخه فعلی نسخه 4.2 هست و 465 صفحه است که در تنهایی ها مطالعه کن و از GitHub دانلود کن و از ماژول 4 شروع به خوندن کن.
+
+Top 10 صرفا معیار پرتکرارها میباشد و معیار پن‌تست نیست.
+
+HTTP Response Header
+
+- Status Code
+- Informational
+- Success
+- Redirect
+- Client Error
+- Server Error
+
+code:text
+100 → Info
+200 → Success
+300 → Redirect
+400 → Client Error
+500 → Server Error
+codeE
+
+سری 100
+
+- 101 Switching Protocols
+- WebSocket
+- Upgrade
+
+در سری 100 در سایت‌هایی که Chat دارند که پشتیبانی صحبت کنی و تو تایپ می‌کنی و میزنه Is Typing باید یه چیزی به نام WebSocket اینجا برقرار باشه. اینجا 101 میبینی.
+
+یعنی Switching Protocol و یعنی می‌خواهیم بریم ارتباط دوطرفه داشته باشیم. در Upgrade، WebSocket میبینی.
+
+سری 200
+
+- 200 OK
+- 201 Created
+- 204 No Content
+- 206 Partial Content
+
+سری 200 یعنی همه چی خوبه.
+
+سری 201 یعنی منجر به ایجاد یه چیزی سمت Server میشه. مثلا Product ایجاد شد یا Ticket ایجاد شد یا یه موجودیتی سمت Server ایجاد شد.
+
+در 204 No Content یعنی درخواستی که زدی انجام شد اما در Response Body چیزی ندارم بهت بدم و حرفی ندارم بهت بزنم.
+
+مثلا سایت گوگل یه سری 204 میگیری. گوگل اومد یه درخواست زده 204 و میخاد ببینه نتت وصله یا نه. با JS درخواست میزنه سمت خودش که ببینه تو وصلی یا نه و اگر 204 نگیره یعنی تو قطعی.
+
+ممکنه متد DELETE هم باشه و 204 هم بگیری یعنی یه چیزی حذف شد.
+
+در 206 Partial Content یعنی جوابی که دارم بهت میدم به عنوان Server یه جواب نصفه نیمه است و کل جواب نیست.
+
+Internet Download Manager رو دیدی ۸ پارت میکنه فایل رو. اگر GET بزنه که کل فایل رو میگیره. مثلا میگه از بایت فلان تا فلان رو میخام و اونجا 206 میده یعنی این بخشی از دیتا است.
+
+بخش 301 و 302
+
+- 301
+- 302
+- 307
+- 308
+- Redirect
+- Cache
+
+301 و 302 حفظ متد نمیکنن.
+
+307 و 308 حفظ متد میکنن.
+
+در 301 Browser من میره در یک File مثلا noorant.com همون .ir یه File SQLite.
+
+اما 302 هر بار درخواست رو میزنه.
+
+یکیش موقته و ذخیره نمیشه و یکیش ذخیره میشود.
+
+طرف سایت رو 301 برگردونه به evil.com و کلیه کاربرایی که در اون یک روز سایت رو باز کردن نمیتونن دیجی کالا رو ببینن و همه Evil رو میبینن. یه نوع DoS است و حتی وقتی مشکل حل شد هم هنوز رو Cache کاربر است.
+
+سری 400
+
+- 400 Bad Request
+- 401 Unauthorized
+- 403 Forbidden
+- 405 Method Not Allowed
+- 429 Too Many Requests
+- Authentication
+- Authorization
+- Verb Tampering
+
+در کد 400 یعنی Bad Request و Header ها رو رعایت نکردی. مثلا CRLF بوده و رعایت نکردی.
+
+در کد 401 یعنی Unauthorized اما در اصل Authentication و یعنی نمیدونم تو کی.
+
+در کد 403 یعنی Login هستی اما اینقدر دسترسی نداری. Authorization است در اصل و یعنی میدونم تو کی و بهت جواب نمیدم.
+
+در کد 405 یعنی متد مورد قبول نیست. یه سایت رو GET درخواست میزنی و میگه قبول نیست اما PUT میزنی و میگه اوکیه.
+
+یه وقتایی این دستکاری متدها چیزایی به ما میدن که نباید میدیدیم.
+
+درخواست میزنم بهم میگه 403 یا 401 با GET زدیم اما بیایم با POST بزنیم ممکنه 200 بگیریم که بهش میگن:
+
+code:text
+Verb Tampering
+codeE
+
+رو اونهایی که .NET هست کاری انجام ندید چون اکانت شما بسته میشود.
+
+در کد 429 یعنی Too Many Requests.
+
+بنا به دلیل محدود شده.
+
+ساده ترین کاری که میکنی IP تو عوض میکنی.
+
+سری 400 یعنی مشکل شمایی.
+
+سری 500
+
+- 500 Internal Server Error
+- 502 Bad Gateway
+- 503 Service Unavailable
+- 504 Gateway Timeout
+- 522
+- Server Error
+- CDN
+- Reverse Proxy
+- Upstream
+
+سری 500 یعنی مشکل سرور است.
+
+در کد 500 یعنی Internal Server Error و یعنی درخواست زدی و میخاسته بره در دیتابیس بنویسه و ارتباط با Database قطع بوده است.
+
+ممکنه یه ورودی میگیره و یه محاسباتی داره میکنه و نتیجه نداره مثلا تقسیم بر صفر.
+
+درواقع هرچیزی باعث Crash کد میشه 500 میده.
+
+اگر شما باعث بودی خوشحال میشی.
+
+استاد : من همه خطاهای Client Error رو Server Error بر میگردونم و درواقع فقط Status Code رو.
+
+در کد 503 یعنی Service Unavailable.
+
+ریسورس سرور تموم شده حالا یه ریسورسی.
+
+اگر شما باعثش بودی یعنی درخواست هات زیاد بوده که ریسورس تموم بشه یعنی سرور DoS شده.
+
+کدهای 502 و 504 و 522
+
+- CDN
+- Reverse Proxy
+- Upstream
+- Origin Server
+
+کدهای 504 و 522 و 502 یه معنی میدن.
+
+کلاینت در مرورگر آدرس وارد کرده و درخواست رسیده به سمت CDN یا مثلا اروان که باید درخواست رو ببره به سرور اصلی بده. این درخواست اومده رفته CDN و جواب نداده.
+
+اروان کلاد 504 میده.
+
+حالا اگر این وسط Cloudflare باشه 522 میده.
+
+اگر Nginx باشه این وسط 502 میده.
+
+پس اگر یه جایی این‌ها رو دیدی یه واسطی این وسط هست که تحویل درخواست اصلی بده و سرور اصلی Up نبوده.
+
+Up نبودن الزاما تقصیر سرور اصلی نیست و گاهی از CDN است.
+
+ممکنه سرور اصلی انتظار داره فقط ۲۰ رنج بهش درخواست بزنن یعنی White List داره. حالا همه IP های دیگر بلاک است و حالا اروان تصمیم میگیره یه IP دیگه هم بزاره برا خودش.
+
+ماژول دو RCON
+
+- Recon
+- Wide Recon
+- Narrow Recon
+- Asset Discovery
+- Domain
+- Subdomain
+- IP
+
+آن چیزی که OWASP از ریکان مطرح میکنه سر سری هست و استاد یک برگه راهنما ایجاد کرده که همه چیز اونجا هست و ابزارها هم اونجا هست.
+
+هیچ وقت بدون جمع آوری اطلاعات Attack نزنید.
+
+یه Wide Recon داریم یه Narrow Recon.
+
+اگر گفته بود هر چی دارایی برای ماست باید ببینی چه دارایی هایی دارد.
+
+در قدم اول باید کشف دامین بکنی.
+
+هر دامین یه سری ساب دامین دارد و قدم بعدی پیدا کردن ساب دامین ها میباشد.
+
+این ساب دامین ها چند حالت دارد:
+
+حالت اول پشت ریورس پراکسی است و پشت اروان و کلادفلر.
+
+حالت دوم ممکنه ساب دامین پشت ریورس پراکسی نباشد.
+
+حالت سوم ممکنه ساب دامین باشه که به هیج جایی ریسالو نشود و مثلا کلا 5 دقیقه اوردن بالا الان پایینه.
+
+حالت چهارم ممکنه این مجموعه یک VPS اورده بالا که ایپی پابلیک داره ولی هیچ چیزی روش نیست.
+
+حالت پنجم شاید یه دارایی که نمی‌تونستی پیدا کنی چون هیچ دامینی نداشت و اگر تو رنج بگردی بتونی پیداش کنی.
+
+سه تا سبد داریم
+
+- Domains
+- Subdomains
+- IP Addresses
+
+سبد دامین ها
+
+سبد ساب دامین ها
+
+سبد ایپی ها
+
+ما مدام میگردیم.
+
+link
+https://wation.net/portal/cheatsheets/recon/wide
+linkE
+
+هر دامینی که خواستی Pentest کنی در قدم اول مطابق حرکت ابزار ها حرکتی میکنی.
+
+تاریخچه Recon
+
+- History
+- Changes
+- Neighbors
+
+تاریخچه تغییر اطلاعات نیز برای ما مهمه.
+
+حتی همسایه ها برامون مهمه.
+
+TLD فاز
+
+- TLD
+- .net
+- .com
+- .ir
+
+یعنی مثلا:
+
+code:text
+.net
+.com
+.ir
+codeE
+
+ممکنه یه TLD درون یک سازمان استفاده بشود.
+
+DNS Recon
+
+- DNS
+- dnsx
+- A Record
+- MX Record
+- TXT Record
+- SPF
+
+هیچ وقت اینکارو با اینترنت خانگی و VPS خانگی نکن چون False Positive داره.
+
+چون اون فیلترینگ میبینه TLD .bet ممنوعه و خروجی نویز میفته یعنی میاد ایپی زیرساخت بهت میده.
+
+اگر خروجی ایده ال میخای بیش از یک بار انجام بده و ممکنه Command Timeout بشه.
+
+ابزار dnsx برای ProjectDiscovery است که ابزار هاش خوبه و با Go نوشته شده است که باید Go نصب داشته باشی.
+
+مهم ترین رکورد رکورد A هست.
+
+گاهی اوقات رکورد MX منجر به نشت ایپی سرور میشه.
+
+اینجا با حوصله بشین مرحله به مرحله ویشن رو بخون و مراحل رو از لینکی که گذاشتم.
+
+TXT Record و SPF
+
+- TXT Record
+- SPF
+- Email
+- IP Address
+
+Record TXT رکورد مهمی است.
+
+یک رکورد مهم داره به نام SPF که توش ایپی هست.
+
+رکورد SPF مشخص میکند که اگر مجموعه بخواد ایمیل بزنه مبدا های مجاز چیست ؟
+=============================================================================================================================================
